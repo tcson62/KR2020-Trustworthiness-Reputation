@@ -140,21 +140,16 @@ New Mexico State University
 \maketitle
 
 \begin{abstract}
-The paper proposes a framework for answering the question of whether  statements 
-made by an agent can be believed, in light of observations made over time. 
-The basic components of the framework are a formalism for 
+The paper proposes a framework for capturing how an agent’s beliefs evolve over time  in response to observations and for answering the question of whether  statements 
+made by a third party can be believed. The basic components of the framework are a formalism for 
 reasoning about actions, changes, and observations and a formalism for default reasoning. 
-The paper describes a concrete system implemented using answer set programming for  
-asserting the truthfulness of statements made by agents, starting
- from observations, knowledge about the actions of the agents, and a theory about the 
- ``normal'' behavior of agents. 
-\textcolor{red}{[REMOVE sentence]} The paper also introduces the notions of \emph{supporters} and 
-\emph{denials} of a statement, which can be used to guide 
-the process of determining the truthfulness of statements. The paper presents an application of the 
+The paper describes a concrete implementation that leverages answer set programming for   
+determining the evolution of an agent's ``belief state'', based on observations, knowledge about the effects of actions, and a theory about how these influence an agent's beliefs. 
+The beliefs are then used to assess whether statements made by a third party can be accepted as truthful. The paper investigates an application of the 
 proposed framework in the detection of
  man-in-the-middle attacks targeting computers and cyber-physical systems. 
-Finally, the paper briefly 
-discusses related work   and   possible extensions. 
+Finally, we briefly 
+discuss related work   and   possible extensions. 
 \end{abstract}
 
 % \begin{keywords}
@@ -175,9 +170,9 @@ development of resources that allow people to rate companies (e.g., \url{expedia
 the news media, leading to the dissemination of untruthful stories  (e.g., the `Phuc Dat Bich' story\footnote{ 
 {\tiny
 \url{http://gizmodo.com/phuc-dat-bich-is-a-massive-phucking-faker-1744588099}
-}} reported by BBC and Sky News). Another example is the case of a hotel reviewer with the alias {\em ``AmishBoy''} who gave high ratings to different hotels in the same day \cite{MinnichCMLF15}---thus proving  that his statements are untrustworthy. These situations pose the problem of  \emph{understanding whether 
-statements made by an agent can be considered truthful within a context composed of observations and
-knowledge about default behavior. }
+}} reported by BBC and Sky News). Another example is the case of a hotel reviewer with the alias {\em ``AmishBoy''} who gave high ratings to different hotels in the same day \cite{MinnichCMLF15}---thus suggesting  that his statements may be untrustworthy. These situations highlight the problem of  \emph{understanding whether 
+statements made by an agent can be accepted as truthful wth respect to a context composed of observations,
+knowledge about default behavior, and corresponding beliefs. }
 
 
 %\begin{example}
@@ -197,41 +192,35 @@ knowledge about default behavior. }
 
 
 
-In this paper, we are interested in reasoning about the truthfulness of statements made by agents. We assume that we can observe the world as well as other agents' actions. The basis for our judgments will be composed of our observations, performed along
-a linear time line, along with  our commonsense knowledge about agents' behavior and the world. We assume that observations are \emph{true} at the time they are made, and will stay true until additional pieces of information prove otherwise. Our judgments reflect what we believe. They might not correspond to the ground truth and could change over time. This is because we often have to make our judgment in presence of incomplete information. This makes reasoning about the truthfulness of statements made by agents \emph{non-monotonic}. Furthermore, our judgment against a statement is \emph{independent} of whether or not we trust the agent from whom the statement originated. As such, our study in this paper differs from the 
+In this paper, we are interested in reasoning about the ``belief state'' of an agent and what that tells us about the truthfulness of statements made by a third party. We assume that we can observe the world as well as other agents' actions. The basis for our judgments will be composed of our observations, performed on
+a linear time line, along with  commonsense knowledge about the world and about how observations and knowledge influence an agent's beliefs. We assume that observations are \emph{true} at the time they are made, and will stay true until additional pieces of information prove otherwise. The approach is designed to reflect the fact that an agent's beliefs are subjective -- they might not correspond to the ground truth and could change over time. This is because judgments are often made in the presence of incomplete information. This makes reasoning about beliefs and truthfulness of statements \emph{non-monotonic}. Note that, in this paper, judgments about a statement are made  \emph{independently} of whether or not we trust the agent from whom the statement originated. As such, our study in this paper differs from the 
 extensive literature about trust models between agents  (see, e.g., \cite{ArtzG07,SabaterS05}). We will elaborate further on this issue in the related work section. 
 
 \begin{example} \label{ex1}
 When we first met at an event (time $t_0$), John stated that he comes from a poor family. 
-We later learn that John attends a private college, renowned for  its expensive tuitions (time $t_1$). Later on, we learn 
+We later learn that John attends a private college, renowned for  its expensive tuition (time $t_1$). Later on, we learn 
 that John attends the college thanks to a  scholarship awarded  due to his financial hardship (time $t_2$).
 
-This story spans over three time instances: $t_0$, $t_1$, and $t_2$. At each time instance, we learn (through observations) some facts or receive some statements, which  affect our beliefs about John's statement as follows:    
+This story spans over three time instances: $t_0$, $t_1$, and $t_2$. During the story, we learn (through observations) some facts, which  affect our beliefs about the world as follows:    
 
 \begin{list}{$\bullet$}{\itemsep=0pt \topsep=0pt \parsep=0pt \leftmargin=10pt}  
-\item Time $t_0$: John says that his family is poor (property $poor$ is true). It is likely that we would believe John---since
- we have no reasons to conclude otherwise. 
+\item Time $t_0$: John makes the statement that his family is poor (property $poor$ is true). No observations are available to us and thus we do not know if John's family is indeed poor or not. We have no reasons to conclude that John's statement is not truthful. 
 
-\item Time $t_1$:  We observe the fact that John attends an expensive college (property $in\_college$ is true). {Since students attending the college are \emph{normally} from rich families} (default $d_1$), this would lead us to  conclude that John has lied to us. We indicate that  the default $d_1$ is the reason to draw such conclusion. 
+\item Time $t_1$:  We observe that John attends an expensive college (property $in\_college$ is true). {\emph{Normally}, we believe that someone attending an expensive college is from a rich family.} (default $d_1$). Hence, our belief at this point is that John is rich. This prevents us from accepting John's statement as truthful. We indicate that  the default $d_1$ is the reason to draw such conclusion. 
 
-\item Time $t_2$: We observe the fact that John has a need-based scholarship   (property $has\_scholarship$ is true). {Since a student's hardship is \emph{usually} derived from the family's financial situation} (default $d_2$), this fact   allows us to withdraw the conclusion that John is a liar, made at  time instance $t_1$. It is still insufficient for us to conclude that  John's family is poor. 
+\item Time $t_2$: We observe that John has a need-based scholarship   (property $has\_scholarship$ is true). {It is our belief that a student's need-based scholarship is \emph{usually} derived from the family's financial situation} (default $d_2$). Because both defaults are applicable and in conflict with each other, we neither believe that John's family is rich, nor that it is poor. This allows us to withdraw our previous conclusion that John's statement could not be accepted as truthful.  
 
-The situation might be different if, for example, we have a preference among defaults. In this example, if we are inclined to believe in the conclusion of $d_2$ more than that of $d_1$, then we would believe that John's family is poor and thus restore our trust in John's 
-original statement (i.e., truth of $poor$). 
+\item The situation might be different if we had a preference between our defaults. For instance, if we were inclined to favor $d_2$ over $d_1$, then we would believe that John's family is poor. This may strengthen our conclusion that John's statement can be accepted as truthful. 
 % 
 \end{list} 
 \end{example}  
 The main contributions of this paper can be summarized as follows:
 \begin{enumerate}
 \item The formalization of an abstract model to 
-represent and reason about truthfulness of agent's statements; 
+represent and reason about the evolution of an agent's beliefs over time and to draw conclusions about whether third-party statements can be accepted as truthful; 
 \item A concrete realization of the model using
 Answer Set Programming; 
-\item \textcolor{red}{[REMOVE]} The notion of a \emph{supporter} and the notion of a 
-        \emph{denial} 
-of a statement, that can be used for identifying 
-the truthfulness of statements; and 
-\item Application of the proposed framework to a sample problem in the
+\item A use case of the proposed framework on an important problem in the
         area of  cyber security. 
 \end{enumerate}
 %The paper illustrates  how, starting
@@ -382,38 +371,39 @@ a plan if there is a trajectory $S_0 a_0 \dots a_{n-1}S_n$.
 %
 
 
-\section{A General Model for Reasoning about Truthfulness of Statements made by Agents} 
+\section{Beliefs and Truthfulness of Statements} 
 
-In this section, we propose a general framework for representing, and reasoning about, the truthfulness of (statements made by) agents\footnote{
-   From now on, we will often use ``the truthfulness of agents'' interchangeably with  
-   ``the truthfulness of statements made by agents.''
-}. The
+In this section, we propose a general framework for representing, and reasoning about, the beliefs held by an agent. The framework also establishes a link between the beliefs held by the agent and whether it can accept as truthful statements made by a third party. The
 framework  can be instantiated using specific paradigms for reasoning about actions and change and for non-monotonic reasoning. We make
 the following assumptions:
 %
  \begin{itemize}
 %
-\item It is possible to  observe the properties of the world and the occurrences of the agents' actions    over time
+\item It is possible to  observe the properties of the world and the occurrences of the actions    over time
         (e.g., we observe that John buys a car, John is a student, etc.). Let us denote with $O_a$ and $O_w$ 
         the set of action occurrences and the set of observations about the world over time, respectively. 
 
-\item We have adequate knowledge about the agents' actions  and their effects (e.g., the action of buying a car requires that the agent has money and its execution will result in the agent owning a car). This knowledge is represented by an action theory $Act$ in a suitable logic $A$, that allows  reasoning about actions' effects and consequent changes to the world. Let us denote with $\models_A$ the entailment relation defined within the logical framework $A$ used to describe $Act$.    
+\item We have adequate knowledge about actions  and their effects (e.g., the action of buying a car requires that the agent has money and its execution will result in the agent owning a car). This knowledge is represented by an action theory $Act$ in a suitable logic $A$ that allows  reasoning about actions' effects and consequent changes to the world. Let us denote with $\models_A$ the entailment relation defined within the logical framework $A$ used to describe $Act$.    
 
-\item We have commonsense knowledge about ``normal'' behavior (e.g., a person attending an expensive school normally comes from a rich family, a person obtaining need-based scholarship   usually comes from a poor family).
-This knowledge is represented by a default theory with preferences $\textit{Def}$,  that enables reasoning about the state of the world and deriving conclusions whenever necessary. Let us denote with $\models_D$ the entailment relation defined over the default theory framework defining $\textit{Def}$.  
+\item We have commonsense knowledge about how an agent of interest forms its beliefs (e.g., an agent may believe that a person attending an expensive school normally comes from a rich family, a person obtaining need-based scholarship s  usually comes from a poor family).
+This knowledge is represented by a default theory with preferences $\textit{Def}$,  that enables reasoning about the state of the agent's beliefs. Let us denote with $\models_D$ the entailment relation defined over the default theory framework defining $\textit{Def}$.  
  
 \end{itemize} 
 
-The set of observations $O_w$ in Example~\ref{ex1} includes the observations such as `John comes from a poor family' at time point $t_0$, `John attends an expensive college' at time point $t_1$, and `John receives a need-based scholarship' at time point $t_2$. In this particular example we do not have any  action occurrences, i.e., $O_a = \emptyset$. Our default theory $D$ consists of  $d_1$ and $d_2$, which allow us to make conclusions regarding whether John comes from a rich family or not. 
+The set of observations $O_w$ in Example~\ref{ex1} includes the observations such as 
+%`John comes from a poor family' at time point $t_0$, 
+`John attends an expensive college' at time point $t_1$, and `John receives a need-based scholarship' at time point $t_2$. In this particular example we do not have any  action occurrences, i.e., $O_a = \emptyset$.\footnote{Some frameworks for reasoning about actions and change may require the introduction of a NOP action for modeling the example.} Our default theory $D$ consists of defaults $d_1$ and $d_2$ stated earlier, which allow us to make conclusions regarding our agent's beliefs. 
 
+%TEMP
 \begin{figwindow}[1,r,%
-        {\includegraphics[width=0.7\textwidth]{newstep.pdf}},%
+        {\includegraphics[width=0.48\textwidth]{newstep.pdf}},%
         {Answering Question: $(O_a,O_w,Act,Def) \models p[t]$?\label{fig:schema} }]
-Let us consider a theory $T = (O_a, O_w, Act, \textit{Def})$ and the associated entailment relations $\models_A$ and $\models_D$. We are interested in answering the question of whether a statement asserting that a proposition $p$ is true  at a certain time step $t$, denoted by $p[t]$, is true or not. Specifically, we would like to define the entailment relation $\models$ between $T$ and $p[t]$. Intuitively, this can be done in two steps (Figure~\ref{fig:schema}):
 \end{figwindow}
+Let us consider a theory $T = (O_a, O_w, Act, \textit{Def})$ and the associated entailment relations $\models_A$ and $\models_D$. First and foremost, we are interested in defining the beliefs held by the agent over time. And, then, we are interested in using this information for answering the question of whether a statement $p[t]$,  made at time step $t$ about a proposition $p$, can be accepted as truthful. For this, we define the entailment relation $\models$ between $T$ and $p[t]$. Intuitively, the process entails the steps below (Figure~\ref{fig:schema}):
 \begin{list}{$\bullet$}{\itemsep=0pt \parsep=0pt \topsep=0pt \leftmargin=8pt} 
 \item Compute possible models $W[t]$ of the world  at the time step $t$ from  $Act$, $O_a$, and $O_w$ (using $\models_A$); and  
-\item Determine  whether $p$ is true  given  $\textit{Def}$ and $W[t]$ (using $\models_D$). 
+\item Determine  the agent's beliefs by finding which propositions are true  given  $\textit{Def}$ and $W[t]$ (using $\models_D$); \textbf{CHECK FOR ISSUES DUE TO THINGS THAT ARE *TRUE* FROM W[t]}
+\item Determine if the statement $p[t]$ is consistent with respect to the agent's beliefs. 
 \end{list} 
 %
 Let us assume that the equation $W[t] = \{z \mid Act \cup O_a \cup O_w \models_A z[t]\}$ characterizes
@@ -421,12 +411,12 @@ any of the states of the world  at  time step $t$ given $Act$, $O_a$, and $O_w$ 
 $\models_A$). The entailment relation between $T$ and $p[t]$ can be defined as follows.
 %
 {\begin{equation} \label{entail} 
-T \models p[t] \:\:\:\Leftrightarrow \:\:\:
+T \models p[t] \Leftrightarrow
 \begin{array}{c} 
 %T \models p[t] \\
 % \textit{if and only if} \\
   \forall W[t]. \left(\begin{array}{c}
-   W[t] = \{z \mid Act \cup O_a \cup O_w \models_A z[t]\} \Rightarrow 
+   W[t] = \{z \mid Act \cup O_a \cup O_w \models_A z[t]\} \Rightarrow \\
                                                                  Def \cup W[t] \models_D p
                                                                 \end{array}\right)
 \end{array} 
@@ -606,8 +596,8 @@ A $KB = \langle O, RD \rangle$ is \emph{consistent} if $O$ and $RD$ are consiste
 \end{definition} 
 %
 Our goal is to identify whether  a statement $stm(p, s)$ is true at a time step $t$ for $t \ge s$ given a $KB$. We will develop a program $\Pi(KB)$ to answer this question. We assume a finite horizon of steps, denoted by $s(0), \ldots, s(k)$. We use $h(P,S)$ to encode that literal $P$ is true at step $S$. Furthermore, to simplify the use of $\Pi(KB)$ with current ASP solvers, we  encode a rule of the form \eqref{rule}  using {\bf (a)} the ASP atom $rule(r, head, name)$ and
-{\bf (b)} the set of ASP atoms $\{mem(l, name) \mid l \in body\}$; similar encodings are used for  \eqref{default} and \eqref{pref}. 
-This method of encoding is similar to what used  in answer set planning and allows for the separation between  the encoding of the problem and the rules for reasoning with it.
+{\bf (b)} the set of ASP atoms $\{mem(l, name) \mid l \in body\}$, where \(name\) is a unique identifier for the rule; similar encodings are used for  \eqref{default} and \eqref{pref}. 
+This method of encoding is similar to what is used  in answer set planning and allows for the separation between  the encoding of the problem and the rules for reasoning with it.
 The main challenge to be addressed lies in the interaction between observations, defaults, etc. 
 We apply the following principles:
 %
