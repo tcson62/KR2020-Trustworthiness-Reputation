@@ -1,21 +1,32 @@
 %
+%%%% kr.tex
+
+\typeout{KR--20 Instructions for Authors}
+
+% These are the instructions for authors for KR-20.
+
 \documentclass{article}
-\usepackage[utf8]{inputenc}
+\pdfpagewidth=8.5in
+\pdfpageheight=11in
 
-%>>>>>>>>>> AAAI format
+\usepackage{kr}
 
-\usepackage{aaai20}
+% Use the postscript times font!
 \usepackage{times}
-\usepackage{helvet}
-\usepackage{courier}
-\usepackage[hyphens]{url}
+\usepackage{soul}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[small]{caption}
 \usepackage{graphicx}
-\urlstyle{rm}
-\def\UrlFont{\rm}
-\usepackage{graphicx}
-\frenchspacing
-\setlength{\pdfpagewidth}{8.5in}
-\setlength{\pdfpageheight}{11in}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{booktabs}
+%\usepackage{algorithm}
+\usepackage{algorithmic}
+%\usepackage{algorithmicx}
+\urlstyle{same}
+
 % Add additional packages here, but check
 % the list of disallowed packages
 % (including, but not limited to
@@ -45,22 +56,6 @@
 % and change the 0 to a 1 or 2
 % \setcounter{secnumdepth}{0}
 
-% Title and Author Information Must Immediately Follow
-% the pdfinfo within the preamble
-%
-\title{An Answer Set Programming Framework for Reasoning about Truthfulness of Statements by Agents} %\\
-\author{Marcello Balduccini\\
-Saint Joseph's University\\
-\And
-Michael Gelfond\\
-Texas Tech University\\
-\And
-Enrico Pontelli \ and Tran Cao Son\\
-New Mexico State University
-} %\\
-
-%<<<<<<<<<< AAAI format
-
 
 
 
@@ -86,7 +81,7 @@ New Mexico State University
 
 %\usepackage[nodisplayskipstretch]{setspace}
 %\setstretch{1}
-
+\iffalse 
 \setlength{\belowdisplayskip}{0pt} 
 \setlength{\belowdisplayshortskip}{0pt}
 \setlength{\abovedisplayskip}{0pt} 
@@ -98,6 +93,7 @@ New Mexico State University
 
 \setlength{\dbltextfloatsep}{-1pt}  
 \setlength{\dblfloatsep}{-1pt}
+\fi
 
 \newcommand{\memo}[1]{
   \ifthenelse {\boolean{includeMemo}}{\medskip\noindent\fbox{\begin{minipage}[b]{\dimexpr\linewidth-1em}#1\end{minipage}}\medskip\newline} 
@@ -123,14 +119,55 @@ New Mexico State University
 \newcommand{\causesif}[1]{\:\: \texttt{causes} \:\: {#1} \:\: \texttt{if} \:\:}
 \newcommand{\ifthen}{\:\:\texttt{if} \:\:}
 
-
+\allowdisplaybreaks
 
 %\jdate{April 2016}
 %\pubyear{2016}
 %\pagerange{\pageref{firstpage}--\pageref{lastpage}}
 %\doi{S1471068401001193}
 
+\usepackage{listings}
+
+\definecolor{darkgray}{rgb}{0.66, 0.66, 0.66} % needed for a clean compile
+\lstdefinelanguage{clingo}{
+  keywordstyle=[1]\usefont{OT1}{cmtt}{m}{n},%
+  keywordstyle=[2]\textbf,%
+  keywordstyle=[3]\usefont{OT1}{cmtt}{m}{n},%\textit
+  alsoletter={\#,\&},%
+  keywords=[1]{not,from,import,exists,if,else,return,while,
+                break,and,or,for,in,del,and,class,subClass,concern,aspect,subCo,prop,rdf,cpsf,addBy,suppBy,neg,d,relation,holds,h,obs,action,fluent,occurs,req,group,leadTo,use,deg,comp,order,hSubCo,llh_sat_sub,llh_sat,llh_sat_sub_aux,step,deg_pos,nAllPosCon,nActPosCon,possImpactsPos,scoreLoS,wBus,wHum,wTru,wFun,wTim,wBou,wLif,wCom,wDat,last,addFun,func_dec,formulas,sat_formulas,possImpactsNeg,identify_conflict},%
+  keywords=[2]{\#const,\#show,\#minimize,\#maximize,\#base,\#theory,\#count,\#external,\#program,\#script,\#end,\#heuristic,\#edge,\#project,\#show},%
+  keywords=[3]{&,&dom,&sum,&diff,&show,&minimize},%
+  morecomment=[l]{\#\ },%
+  morecomment=[l]{\%\ },%
+  commentstyle={\color{darkgray}}%
+}
+\lstset{numbers=left,numberblanklines=false,basicstyle=\ttfamily\small,language=clingo}
+\lstset{escapeinside={*@}{@*}}
  
+
+
+
+% Title and Author Information Must Immediately Follow
+% the pdfinfo within the preamble
+%
+\title{An Answer Set Programming Framework for Reasoning about Agents' Beliefs and Truthfulness of Statements} %\\
+\author{Marcello Balduccini$^1$ \And 
+Michael Gelfond$^2$ \And
+Enrico Pontelli$^3$ \and Tran Cao Son$^3$ 
+\affiliations
+$^1$Saint Joseph's University \and 
+$^2$Texas Tech University\and 
+$^3$New Mexico State University
+\emails
+   mbalducc@sju.edu,   
+   michael.gelfond@ttu.edu,
+\{epontell, tson\}@cs.nmsu.edu 
+} %\\
+
+%<<<<<<<<<< AAAI format
+
+
  
 \begin{document}  
 
@@ -163,17 +200,22 @@ discuss related work   and   possible extensions.
 Artificial Intelligence research, in the area of knowledge-based and intelligent agents, has been progressing at
 a rapid pace, making it possible to develop agents that can assist and/or replace humans in 
 several tasks. Organizations  use  web-bots for interacting with clients in various capacities, e.g., in providing information about the company or making offers. This trend continues to be fueled by the ubiquitous use of online resources. 
+
 Unfortunately, not every business on the Internet is as 
 honest as one would hope. Stories about businesses that cheat people of goods or services, or falsely advertise their services are not uncommon. Indeed, lying and misrepresentations are more widespread in online negotiations than 
-offline ones \cite{elie}. This concern is also reflected in the 
-development of resources that allow people to rate companies (e.g., \url{expedia.com}, \url{yelp.com},  \emph{Angie's List}) or defend the reputation of a company or an entity (e.g., \url{reputation.com}). Dishonesty is also present in
+offline ones \cite{elie}. Dishonesty is also present in
 the news media, leading to the dissemination of untruthful stories  (e.g., the `Phuc Dat Bich' story\footnote{ 
 {\tiny
 \url{http://gizmodo.com/phuc-dat-bich-is-a-massive-phucking-faker-1744588099}
-}} reported by BBC and Sky News). Another example is the case of a hotel reviewer with the alias {\em ``AmishBoy''} who gave high ratings to different hotels in the same day \cite{MinnichCMLF15}---thus suggesting  that his statements may be untrustworthy. These situations highlight the problem of  \emph{understanding whether 
-statements made by an agent can be accepted as truthful wth respect to a context composed of observations,
-knowledge about default behavior, and corresponding beliefs. }
+}} reported by BBC and Sky News). Another example is the case of a hotel reviewer with the alias {\em ``AmishBoy''} who gave high ratings to different hotels in the same day \cite{MinnichCMLF15}---thus suggesting  that his statements may be untrustworthy.  
 
+The concern about misinformation, disinformation, or dishonesty is also reflected in the 
+development of resources that allow people to rate companies (e.g., \url{expedia.com}, \url{yelp.com},  \emph{Angie's List}) or defend the reputation of a company or an entity (e.g., \url{reputation.com}) or check for the accuracy of some information disseminated by a person or a new outlet (e.g., \url{factcheck.org}). All these aim at providing users with tools for checking the trustworthiness of a piece of information. 
+
+The above development highlights the problem of  \emph{understanding whether statements made by an agent can be accepted as truthful with respect to a context composed of observations,knowledge about default behavior, and corresponding beliefs.} This problem is not new to human. It is indeed as old as the existence of human on the earth. Yet, the amount of information that a human is receiving everyday has gone up significantly since the earth becomes flat, with the introduction of the Internet, and the advances in mobile technologies. This requires, ideally, tools that automatically filter out untrustworthy information for an user. The development of such a tool, on the other hand, requires the understanding of the reasoning process that helps a human to conclude that a piece of information receiving from a third party is true or false.   
+ 
+% \memo{I modified this part - up to this point: dividing into paragraphs, adding the last one} 
+  
 
 %\begin{example}
 %The Gizmodo website carried the following story:\footnote{ 
@@ -196,31 +238,34 @@ In this paper, we are interested in reasoning about the ``belief state'' of an a
 a linear time line, along with  commonsense knowledge about the world and about how observations and knowledge influence an agent's beliefs. We assume that observations are \emph{true} at the time they are made, and will stay true until additional pieces of information prove otherwise. The approach is designed to reflect the fact that an agent's beliefs are subjective -- they might not correspond to the ground truth and could change over time. This is because judgments are often made in the presence of incomplete information. This makes reasoning about beliefs and truthfulness of statements \emph{non-monotonic}. Note that, in this paper, judgments about a statement are made  \emph{independently} of whether or not we trust the agent from whom the statement originated. As such, our study in this paper differs from the 
 extensive literature about trust models between agents  (see, e.g., \cite{ArtzG07,SabaterS05}). We will elaborate further on this issue in the related work section. 
 
+Consider the following motivating example.
 \begin{example} \label{ex1}
 When we first met at an event (time $t_0$), John stated that he comes from a poor family. 
-We later learn that John attends a private college, renowned for  its expensive tuition (time $t_1$). Later on, we learn 
+Later, we  learn that John attends a private college, renowned for  its expensive tuition (time $t_1$). Later yet, we learn 
 that John attends the college thanks to a  scholarship awarded  due to his financial hardship (time $t_2$).
 
-This story spans over three time instances: $t_0$, $t_1$, and $t_2$. During the story, we learn (through observations) some facts, which  affect our beliefs about the world as follows:    
+This story spans over three time instants: $t_0$, $t_1$, and $t_2$. During the story, we learn (through observations) some facts, which  affect our beliefs about the world as follows:    
 
-\begin{list}{$\bullet$}{\itemsep=0pt \topsep=0pt \parsep=0pt \leftmargin=10pt}  
+\begin{itemize}
+
 \item Time $t_0$: John makes the statement that his family is poor (property $poor$ is true). No observations are available to us and thus we do not know if John's family is indeed poor or not. We have no reasons to conclude that John's statement is not truthful. 
 
-\item Time $t_1$:  We observe that John attends an expensive college (property $in\_college$ is true). {\emph{Normally}, we believe that someone attending an expensive college is from a rich family.} (default $d_1$). Hence, our belief at this point is that John is rich. This prevents us from accepting John's statement as truthful. We indicate that  the default $d_1$ is the reason to draw such conclusion. 
+\item Time $t_1$:  We observe that John attends an expensive college (property $in\_college$ is true). {\emph{Normally}, we believe that someone attending an expensive college is from a rich family} (default $d_1$). Hence, our belief at this point is that John is rich. This prevents us from accepting John's statement as truthful. We indicate that  the default $d_1$ is the reason to draw such conclusion. 
 
-\item Time $t_2$: We observe that John has a need-based scholarship   (property $has\_scholarship$ is true). {It is our belief that a student's need-based scholarship is \emph{usually} derived from the family's financial situation} (default $d_2$). Because both defaults are applicable and in conflict with each other, we neither believe that John's family is rich, nor that it is poor. This allows us to withdraw our previous conclusion that John's statement could not be accepted as truthful.  
+\item Time $t_2$: We observe that John has a need-based scholarship   (property $has\_scholarship$ is true). {It is our belief that a student's need-based scholarship is \emph{usually} derived from the family's financial situation} (default $d_2$). Because both defaults are applicable and in conflict with each other, we believe neither that John's family is rich, nor that it is poor. This allows us to withdraw our previous conclusion that John's statement could not be accepted as truthful.  
 
 \item The situation might be different if we had a preference between our defaults. For instance, if we were inclined to favor $d_2$ over $d_1$, then we would believe that John's family is poor. This may strengthen our conclusion that John's statement can be accepted as truthful. 
 % 
-\end{list} 
+\end{itemize}  
 \end{example}  
+
 The main contributions of this paper can be summarized as follows:
 \begin{enumerate}
 \item The formalization of an abstract model to 
-represent and reason about the evolution of an agent's beliefs over time and to draw conclusions about whether third-party statements can be accepted as truthful; 
+represent and reason about the evolution of an agent's beliefs over time and to draw conclusions about whether third-party statements can be accepted as truthful;   
 \item A concrete realization of the model using
-Answer Set Programming; 
-\item A use case of the proposed framework on an important problem in the
+Answer Set Programming; and
+\item A demonstration of the proposed framework on an important problem in the
         area of  cyber security. 
 \end{enumerate}
 %The paper illustrates  how, starting
@@ -334,7 +379,7 @@ $\cal L$ is a set of ground atoms, referred to as \emph{fluents},
  built on $\cal L$.
  A domain description of $\cal L$ is composed of a collection of \emph{axioms} of 
  the following types:
- \begin{list}{$\bullet$}{\topsep=1pt \itemsep=1pt \parsep=0pt \leftmargin=10pt}
+\begin{itemize} 
  \item \emph{Executability Axioms:} these describe the conditions that enable the
          execution of an action, and they have the form $a \executable \ell_1\wedge \dots\wedge \ell_n$,
          where $a\in {\cal A}$ and $\ell_1,\dots,\ell_n$ are fluent literals.
@@ -346,7 +391,7 @@ $\cal L$ is a set of ground atoms, referred to as \emph{fluents},
           have the form
           $\ell \ifthen \ell_1\wedge\dots\wedge\ell_n$
           where $\ell, \ell_1,\dots,\ell_n$ are fluent literals.
- \end{list}
+ \end{itemize} 
  A planning problem in $\cal K$ is a tuple $(D, I, O)$, where $D$ is a domain description
  of $\cal K$ and $I, O$ are two consistent sets of fluent literals---denoting, respectively,
  the initial state and the goals of the planning problem.
@@ -373,58 +418,89 @@ a plan if there is a trajectory $S_0 a_0 \dots a_{n-1}S_n$.
 
 \section{Beliefs and Truthfulness of Statements} 
 
-In this section, we propose a general framework for representing, and reasoning about, the beliefs held by an agent. The framework also establishes a link between the beliefs held by the agent and whether it can accept as truthful statements made by a third party. The
-framework  can be instantiated using specific paradigms for reasoning about actions and change and for non-monotonic reasoning. We make
-the following assumptions:
+In this section, we propose a general framework for representing, and reasoning about, the beliefs held by an agent. The framework also establishes a link between such beliefs and whether the agent may accept as truthful statements made by a third party. The
+framework  can be instantiated using specific paradigms for reasoning about actions and change and for non-monotonic reasoning. We build upon the following foundations:
 %
  \begin{itemize}
 %
+\item An \emph{action signature} $\langle F,B,A \rangle$ is given, where $F$ are symbols for fluents (properties of the world whose truth value may change over time),
+        $B$ are symbols for an agent's beliefs and $A$ are symbols for actions. The components of the signatures are pairwise disjoint.\footnote{This requirement is imposed to simplify some aspects of the presentation, but is not essential.} The notions of fluent literals and of set $\Sigma$ of states of the domain are introduced as usual.
 \item It is possible to  observe the properties of the world and the occurrences of the actions    over time
-        (e.g., we observe that John buys a car, John is a student, etc.). Let us denote with $O_a$ and $O_w$ 
-        the set of action occurrences and the set of observations about the world over time, respectively. 
-
-\item We have adequate knowledge about actions  and their effects (e.g., the action of buying a car requires that the agent has money and its execution will result in the agent owning a car). This knowledge is represented by an action theory $Act$ in a suitable logic $A$ that allows  reasoning about actions' effects and consequent changes to the world. Let us denote with $\models_A$ the entailment relation defined within the logical framework $A$ used to describe $Act$.    
+        (e.g., we observe that John buys a car, John is a student, etc.). 
+        Let $H^n$ be the set of all observations up to step $n$ and all recorded action occurrences up to step $n-1$.
+ 
+\item We have adequate knowledge about actions  and their effects (e.g., the action of buying a car requires that the agent has money and its execution will result in the agent owning a car). This knowledge is represented by an action theory $Act$ in a suitable logic that allows reasoning about actions' effects and consequent changes to the world. 
+        Let $\Phi_{Act}: \Sigma \times A \rightarrow 2^\Sigma$ denote a suitable transition function describing the evolution of the dynamic system of interest. $\hat\Phi_{Act}$ denotes the natural extension of $\Phi_{Act}$ to a history. %A resulting sequence $<\sigma_0,a_0,\sigma_1,a_1,\ldots,\sigma_k>$ is called a \emph{possible path}. 
+        %Let us denote with $\models_A$ the entailment relation defined within the logical framework $A$ used to describe $Act$.    
 
 \item We have commonsense knowledge about how an agent of interest forms its beliefs (e.g., an agent may believe that a person attending an expensive school normally comes from a rich family, a person obtaining need-based scholarship s  usually comes from a poor family).
 This knowledge is represented by a default theory with preferences $\textit{Def}$,  that enables reasoning about the state of the agent's beliefs. Let us denote with $\models_D$ the entailment relation defined over the default theory framework defining $\textit{Def}$.  
  
 \end{itemize} 
 
-The set of observations $O_w$ in Example~\ref{ex1} includes the observations such as 
+The set of observations $O_w\subseteq H^n$ in Example~\ref{ex1} includes the observations such as 
 %`John comes from a poor family' at time point $t_0$, 
-`John attends an expensive college' at time point $t_1$, and `John receives a need-based scholarship' at time point $t_2$. In this particular example we do not have any  action occurrences, i.e., $O_a = \emptyset$.\footnote{Some frameworks for reasoning about actions and change may require the introduction of a NOP action for modeling the example.} Our default theory $D$ consists of defaults $d_1$ and $d_2$ stated earlier, which allow us to make conclusions regarding our agent's beliefs. 
+\begin{itemize}
+    \item `John attends an expensive college' at time point $t_1$, and 
+    \item `John receives a need-based scholarship' at time point $t_2$.
+\end{itemize}
+ In this particular example we do not have any  action occurrences, i.e., $O_a = \emptyset$.\footnote{Some frameworks for reasoning about actions and change may require the introduction of a NOP action for modeling the example.} Our default theory $Def$ consists of defaults $d_1$ and $d_2$ stated earlier, which allow us to make conclusions regarding our agent's beliefs. 
 
+\iffalse
 %TEMP
 \begin{figwindow}[1,r,%
         {\includegraphics[width=0.48\textwidth]{newstep.pdf}},%
-        {Answering Question: $(O_a,O_w,Act,Def) \models p[t]$?\label{fig:schema} }]
+        {Answering Question: $(H^n,Act,Def) \models p[t]$?\label{fig:schema} }]
 \end{figwindow}
-Let us consider a theory $T = (O_a, O_w, Act, \textit{Def})$ and the associated entailment relations $\models_A$ and $\models_D$. First and foremost, we are interested in defining the beliefs held by the agent over time. And, then, we are interested in using this information for answering the question of whether a statement $p[t]$,  made at time step $t$ about a proposition $p$, can be accepted as truthful. For this, we define the entailment relation $\models$ between $T$ and $p[t]$. Intuitively, the process entails the steps below (Figure~\ref{fig:schema}):
-\begin{list}{$\bullet$}{\itemsep=0pt \parsep=0pt \topsep=0pt \leftmargin=8pt} 
-\item Compute possible models $W[t]$ of the world  at the time step $t$ from  $Act$, $O_a$, and $O_w$ (using $\models_A$); and  
-\item Determine  the agent's beliefs by finding which propositions are true  given  $\textit{Def}$ and $W[t]$ (using $\models_D$); \textbf{CHECK FOR ISSUES DUE TO THINGS THAT ARE *TRUE* FROM W[t]}
-\item Determine if the statement $p[t]$ is consistent with respect to the agent's beliefs. 
-\end{list} 
+\fi
+Let us consider a theory $T = (H^n, Act, \textit{Def})$ and the associated $\Phi_{Act}$ and $\models_D$. First, we are interested in defining the beliefs held by the agent over time. And, then, we are interested in using this information for answering the question of whether a statement $b[t]$,  made at time step $t$, where $b \in B$, can be accepted as truthful. For this, we define the entailment relation $\models$ between $T$ and $b[t]$. Intuitively, the process entails the steps below: %(Figure~\ref{fig:schema}):
+
+\begin{itemize}
+\item Compute  $\hat\Phi_{Act}(H^n,\Sigma_0)$, the set of states that are reachable from the initial state given the history $H^n$,
+where $\Sigma_0$ denotes the initial state specified by $Act$ and $H^n$, which can be incomplete. 
+For compactness, below we abbreviate $\hat\Phi_{Act}(H^n,\Sigma_0)$ with $W[n]$;  
+
+%Compute the set $W[t]$ of fluent literals that are expected to hold at time step \(t\) according to the history;
+
+\iffalse
+\memo{
+Compute  $\hat\Phi_{Act}(H^n,\Sigma_0)$, the set of states that are reachable from the initial state given the history $H^n$,
+where $\Sigma_0$ denotes the initial state specified by $Act$ and $H^n$. 
+For simplicity of the presentation, we denote $\hat\Phi_{Act}(H^n,\Sigma_0)$ with $W[t]$. 
+}
+\fi
+
+\item Determine  the agent's beliefs by finding which propositions are derivable from $\textit{Def}$ and $W[t]$ (using $\models_D$). We note that $W[t]$ can be a set of states and the different notions of entailment such as \emph{skeptical} and \emph{credulous} entailment could be applied here; 
+
+\item Determine if the statement $b[t]$ is consistent with respect to the agent's beliefs. 
+\end{itemize}  
 %
-Let us assume that the equation $W[t] = \{z \mid Act \cup O_a \cup O_w \models_A z[t]\}$ characterizes
-any of the states of the world  at  time step $t$ given $Act$, $O_a$, and $O_w$ (based on the semantics of 
-$\models_A$). The entailment relation between $T$ and $p[t]$ can be defined as follows.
+%The definition of ``expected to hold'' depends on the choice of logic and approach. 
+%For the purpose of our discussion, $W[t]$ denotes the set $\hat\Phi_{Act}(H^n)$ of states that are reachable from the initial state given the history $H^n$.
+%, where $\Sigma_0$ denotes the initial state specified by $Act$ and $H^n$. 
+%For simplicity of the presentation, we denote $\hat\Phi_{Act}(H^n,\Sigma_0)$ with $W[t]$. 
+%we assume that $W[t] = \{ l \,|\, l\in \bigcap \hat\Phi_{Act}(H^t) \}$ characterizes
+%the fluent literals that are expected to hold at time step $t$ according to history $H^n$ given $Act$. 
 %
-{\begin{equation} \label{entail} 
-T \models p[t] \Leftrightarrow
-\begin{array}{c} 
-%T \models p[t] \\
-% \textit{if and only if} \\
-  \forall W[t]. \left(\begin{array}{c}
-   W[t] = \{z \mid Act \cup O_a \cup O_w \models_A z[t]\} \Rightarrow \\
-                                                                 Def \cup W[t] \models_D p
-                                                                \end{array}\right)
-\end{array} 
-\end{equation} }
+The entailment relation between $T$ and $b[t]$ can thus be defined by:
 %
-Note that this definition also allows one to identify elements of $O_a$ and $O_w$ which, when obtained, will result in the 
-confirmation or denial of $T \models p[t]$. As such, a system that obeys \eqref{entail} can also be used by users who are 
-interested in  what they need to do in order to believe in a statement about $p$ at the time step $t$,
+%T \models p[t] \Leftrightarrow
+%\begin{array}{c} 
+%%T \models p[t] \\
+%% \textit{if and only if} \\
+%  \forall W[t]. \left(\begin{array}{c}
+%   W[t] = \{z \mid Act \cup O_a \cup O_w \models_A z[t]\} \Rightarrow \\
+%                                                                 Def \cup W[t] \models_D p
+%                                                                \end{array}\right)
+%\end{array} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{align} 
+T \models b[t] \,\,\Leftrightarrow\,\, \langle W[t], Def \rangle \models_D b \label{entail} 
+\end{align} 
+ 
+Note that this definition also allows one to identify elements of $H^t$ that, when obtained, will result in the 
+confirmation or denial of $T \models b[t]$. As such, a system that obeys \eqref{entail} can also be used by users who are 
+interested in  what they need to do in order to believe in a statement about $b$ at the time step $t$,
  given their beliefs about the behavior of the observed agents. 
 
 
@@ -443,18 +519,91 @@ interested in  what they need to do in order to believe in a statement about $p$
 \end{figure} \fi
 %
 To develop a concrete system for reasoning about truthfulness of agents using \eqref{entail}, specific formalizations of $Act$ and $\textit{Def}$ need to be developed. There is a large body of research related to these two areas, and deciding which one to use depends on the system developer. 
-Well-known formalisms for reasoning about actions and change, such as action languages \cite{GelfondL98}, situation calculus \cite{Reiter01}, etc., can be employed for $Act$ (and $\models_A$).  
+Well-known formalisms for reasoning about actions and change, such as action languages \cite{GelfondL98}, situation calculus \cite{Reiter01}, etc., can be employed for $Act$ and $\Phi_{Act}$.  
 Approaches to default reasoning with preferences, such as those proposed in  \cite{brew99,BrewkaE00,DelgrandeST03,GelfondS98}), can be used for $\textit{Def}$ (and $\models_D$). In addition, 
 let us note that, in the literature, $\models_D$ can represent \emph{skeptical} or \emph{credulous} reasoners; and  the model does not specify how observations are collected. Deciding which type of reasoning is suitable or how to collect observations is an important issue, but it is application-dependent and beyond  the scope of this paper. 
 %In this paper, we use observations  in a broad sense: it might be something that we learn some facts about a property of the world, or we actually observed it (via the execution of an action), etc. 
 %
-\section{Reasoning about Truthfulness of Agents Using Answer Set Programming (ASP)}  
 
-We will now present a concrete system for reasoning about truthfulness of agents using \emph{Answer Set Programming (ASP)}.  We select ASP as the host language since there exist several approaches to reasoning about actions and changes as well as default reasoning using ASP. This enables  the seamless integration of the two steps involved in ~\eqref{entail} into a single system. 
+
+
+\section{Reasoning about Beliefs and Truthfulness Using Answer Set Programming}  
+
+We will now present a concrete system for reasoning about truthfulness of agents using \emph{Answer Set Programming (ASP)} \cite{MarekT99,GelfondL91}.  We select ASP as the host language since there exist several approaches to reasoning about actions and changes as well as default reasoning using ASP. This enables  the seamless integration of the two steps involved in ~\eqref{entail} into a single system. 
 Several efficient ASP solvers are available, that enable the use of the proposed system in practical applications. In particular, we will use answer sets (and projections of answer sets over specific time points) to capture $W[t]$, and use established encodings of action theories and defaults in ASP.
   
  
 \subsection{Background: Answer Set Programming}
+
+A logic program $\Pi$ is a set of rules of the form
+%
+\begin{equation}
+\label{lprule1}
+ a_0 \leftarrow a_1,\ldots,a_m,\naf a_{m+1},\ldots,\naf a_n
+\end{equation}
+%
+or
+%
+\begin{equation}
+\label{lprule2}
+ \bot \leftarrow a_1,\ldots,a_m,\naf a_{m+1},\ldots,\naf a_n
+\end{equation}
+%
+where $0 \le m \le n$, each $a_i$ is an atom of a first-order
+language $\cal P$, $\bot$ is a special symbol denoting the
+truth value \emph{false}, and $\naf$ is a connective called {\em
+negation-as-failure}. A negation as failure literal (or
+naf-literal) is of the form $\naf a$ where $a$ is an atom. For a
+rule of the form (\ref{lprule1})-(\ref{lprule2}), the left and
+right hand side of the rule are called the \emph{head} and the
+\emph{body}, respectively. A rule of the form (\ref{lprule2}) is
+also called a constraint.
+
+Given a logic program $\Pi$, we will assume that each rule in
+$\Pi$ is replaced by the set of its ground instances so that all
+atoms in $\Pi$ are ground. Consider a set of ground atoms $X$. The
+body of a rule of the form (\ref{lprule1}) or (\ref{lprule2}) is
+satisfied by $X$ if $\{a_{m+1},\ldots,a_n\} \cap X = \emptyset$
+and $\{a_{1},\ldots,a_m\} \subseteq X$. A rule of the form
+(\ref{lprule1}) is satisfied by $X$ if either its body is not
+satisfied by $X$ or $a_0 \in X$. A rule of the form
+(\ref{lprule2}) is satisfied by $X$ if its body is not satisfied
+by $X$. An atom $a$ is supported by $X$ if $a$ is the head of some
+rule of the form (\ref{lprule1}) whose body is satisfied by $X$.
+
+For a set of ground atoms $S$ and a program $\Pi$, the reduct
+of $\Pi$ with respect to $S$, denoted by $\Pi^S$, is the program
+obtained from the set of all ground instances of $\Pi$ by deleting
+
+\begin{enumerate}
+\item each rule that has a naf-literal $\naf a$ in its body with
+$a \in S$, and
+
+\item all naf-literals in the bodies of the remaining clauses.
+\end{enumerate}
+
+$S$ is an \emph{answer set (or a stable model)} of $\Pi$ if it
+satisfies the following conditions.
+
+\begin{enumerate}
+\item  If $\Pi$ does not contain any naf-literal
+(i.e. $m=n$ in every rule of $\Pi$) then $S$ is the smallest set
+of atoms that satisfies all the rules in $\Pi$.
+
+\item If the program $\Pi$ does contain some naf-literal
+($m < n$ in some rule of $\Pi$), then $S$ is an answer set of
+$\Pi$ if $S$ is the answer set of $\Pi^S$. (Note that $\Pi^S$ does
+not contain naf-literals, its answer set is defined in the first
+item.)
+\end{enumerate}
+
+A program $\Pi$ is said to be \emph{consistent} if it has an
+answer set. Otherwise, it is inconsistent.
+
+\iffalse 
+
+\textcolor{red}{We should have at least a better section on ASP – to make things self-contained, mention skeptical and credulous reasoning in ASP – what does it mean – this will be helpful for the definitions later. We may also want to talk about models of a history from \cite{BalducciniG03}.}
+
 
 ASP is a programming paradigm \cite{Niemela99,MarekT99}  based on logic programming under the answer set semantics \cite{GelfondL90}. 
 A logic program $\Pi$ is a set of rules of the form 
@@ -464,9 +613,14 @@ where $0 \le m \le n$,   $a_i$'s and $c$
 are  ground literals in a first order language,\footnote{Rules with variables represent the set of all 
         of their  ground instances.}   
 and $\naf$ represents {\em default negation}. 
-A rule is satisfied by a set of literals $S$ if $c \in S$, or $\{a_1,\ldots,a_m\} \setminus S \ne \emptyset$, or $\{a_{m+1},\ldots,a_{n}\} \cap S \ne \emptyset$. A consistent set of literals $S$ is a model of a program if it satisfies all the rules of the program. $S$ is an answer set of a program if it is a consistent minimal model of the program obtained by {\em (i)} deleting all rules with some $a \in S$ such that $not \: a$ appears in the rule; and {\em (ii)} deleting all  $not \: a$ from the remaining rules.  Programs without an answer set are said to be inconsistent. Answer sets can be computed using answer set solvers. Extended syntactic notations have been proposed to facilitate the encoding of commonly used patterns (e.g., aggregates). In this paper, we use the  syntax of ASP used in  {\sc Clasp}\footnote{
-  \url{http://potassco.sourceforge.net/}
-} or Dlv\footnote{\url{http://www.dlvsystem.com/}
+A rule is satisfied by a set of literals $S$ if $c \in S$, or $\{a_1,\ldots,a_m\} \setminus S \ne \emptyset$, or $\{a_{m+1},\ldots,a_{n}\} \cap S \ne \emptyset$. A consistent set of literals $S$ is a model of a program if it satisfies all the rules of the program. $S$ is an answer set of a program if it is a consistent minimal model of the program obtained by {\em (i)} deleting all rules with some $a \in S$ such that $not \: a$ appears in the rule; and {\em (ii)} deleting all  $not \: a$ from the remaining rules.  Programs without an answer set are said to be inconsistent. 
+
+\fi 
+
+
+Several extensions (e.g.,  \emph{choice atoms}, \emph{aggregates}, etc.) have been introduced to simplify the use of ASP. We will use and explain them whenever it is needed. Answer sets can be computed using answer set solvers. Extended syntactic notations have been proposed to facilitate the encoding of commonly used patterns (e.g., aggregates). In this paper, we use the  syntax of ASP used in  {\sc Clasp}\footnote{
+  \url{https://github.com/potassco}
+} or DLV\footnote{\url{http://www.dlvsystem.com/}
 }. 
 
 
@@ -486,14 +640,12 @@ A rule is satisfied by a set of literals $S$ if $c \in S$, or $\{a_1,\ldots,a_m\
 \subsection{Reasoning with No Observations about Action Occurrences}
 
 Let us start with a simpler case---where we do not worry about action
-occurrences. Let us assume  a propositional language (i.e., a {\em signature}) $\cal L$, 
-whose elements are called fluents. Let us also assume that $\cal L$ does not contain the following predicates: 
+occurrences. We represents the components of the theory by means of keywords 
 $stm$ (for $statement$), $obs$ (for $observed$), $rule$, $default$, and $prefer$. 
-Fluent literals (or literals) and (fluent) formulae are defined as usual, using 
-propositional combinations of fluents. $\overline{l}$ 
-denotes the negation of literal $l$. Agents can make statement about literals.  
-Statements are given in the form {$stm(p,s)$}
-where  $s$ is a non-negative integer (representing a time step) and $p$ is a literal.  
+Fluent literals are defined as usual. Similarly, symbols for beliefs yield the notion of belief literal. By literals we mean fluent literals or belief literals. $\overline{l}$ 
+denotes the complement of literal $l$. Agents can make statement about literals.  
+Statements are given in the form {$stm(b,s)$}
+where  $s$ is a non-negative integer (representing a time step) and $b$ is a belief literal.  
 For example, the statement `John said that he is poor'  can be stated as 
 $stm(poor, 0)$. 
 
@@ -558,139 +710,216 @@ the default $d_1$ is  preferred to $d_2$ whenever $body$ holds.
 \fi
 
 \begin{definition} 
-A \emph{knowledge base (KB)} about an agent, over a signature  $\cal L$, 
-is a pair $\langle  O, RD \rangle$ where: 
-\begin{list}{$\bullet$}{\topsep=1pt \parsep=0pt \itemsep=1pt \leftmargin=10pt}
+A \emph{knowledge base (KB)} over an action signature  $\langle F,B,A \rangle$, 
+is a tuple $\langle  O, RD \rangle$ where: 
+\begin{itemize} 
 \item $O$ is a set of observations, each of the form 
-{
+%
 \begin{align}\label{obs}
-obs(p,  s)  
+obs(l,  s)  
 \end{align} 
-}
-where $p$ is a literal and $s$ is a non-negative integer; 
+
+ 
+where $l$ is a fluent literal and $s$ is a non-negative integer; 
 \item $RD$ is a collection of expressions of the form 
-{
+%
 \begin{align}
-rule(r, head, body)\label{rule} \\
-default(d, head, body) \label{default} \\
-prefer(d_1, d_2, body) \label{pref}
+rule(r, b, body)\label{rule} \\
+default(d, b, body) \label{default} \\
+prefer(d, d', body) \label{pref}
 \end{align} 
-}
-where $r$, $d$, $d_1$, and $d_2$ are constants which do not belong to $\cal L$, 
-$head$ is a literal and $body$ is a set of literals in $\cal L$.  
-\eqref{rule}, \eqref{default}, and \eqref{pref} are referred to as a 
- \emph{rule}, a \emph{default}, and a 
- \emph{preference} between defaults, respectively.  
-\end{list} 
+
+where $r$, $d$ and $d'$ are constants that do not occur in the signature, 
+$b$ is a belief literal and $body$ is a set of literals.  
+\end{itemize}  
 \end{definition} 
+Statements \eqref{rule}, \eqref{default}, and \eqref{pref} are referred to as a 
+ \emph{rule}, a \emph{default}, and a 
+ \emph{preference} between defaults, respectively. 
+
 Intuitively, $r$ and $d$ are used to name rules and defaults. 
 %
 %We will next define the notion of consistent knowledge bases. 
-We say that a set of observations $O$ is \emph{consistent} if, for each time step $s$ and proposition $p$, $\{obs(p,s), obs(\neg p, s)\} \not\subseteq O$. 
-A set of rules and defaults $RD$ is \emph{consistent} if, for any consistent set of literals $X$, the logic program 
-$\{head \leftarrow body  \mid rule(r, head, body) \in RD\} \cup \{\ell \leftarrow \:\mid\: \ell\in X\}$
-is consistent.  
+We say that a set of observations $O$ is \emph{consistent} if, for each time step $s$ and fluent literal $l$, $\{obs(l,s), obs(\neg l, s)\} \not\subseteq O$. 
+Following the conventional assumption in the literature, we will make the following assumptions about the preference relation in $RD$: 
+\emph{acyclic preference}: we assume that the preference relation between defaults represents a transitive and irreflexive relation, i.e., there exists no sequence of preference statements $prefer(d_i, d_{i+1}, body_i)$, $i=1,\ldots,k$, in $RD$ such that $\bigcup_{i=1}^k body_i$  is consistent. 
+
+\iffalse 
+I added 
+Following the conventional assumption in the literature, we will make the following assumptions about the preference relation in $RD$: 
+\begin{itemize}
+    \item \emph{Non-Cyclic Preference}: we assume that the preference relation between defaults represents a transitive and irreflexive relation, i.e., there exists no sequence of preference statements $prefer(d_i, d_{i+1}, body_i)$, $i=1,\ldots,k$, in $RD$ such that $\bigcup_{i=1}^k body_i$  is consistent. 
+    \item \emph{Belief in Truth}: we assume that for each belief literal $l$, $RD$ contains the default $default(d_b, l, [l])$ and for each default $default(d, \overline{l}, body)$, if $body \ne [\overline{l}]$ is not empty then $prefer(d, d_b, [])$ belongs to $RD$. This default states that if $b$ is true then it is believed by default.
+\end{itemize}
+\fi 
+
+A set of rules $RD$ is \emph{consistent} if, for any consistent set of fluent literals $X$, the logic program 
+$\{b \leftarrow body  \mid rule(r, b, body) \in RD\} \cup \{l \leftarrow \:\mid\: l\in X\}$
+is consistent.
 %
 \begin{definition}
-A $KB = \langle O, RD \rangle$ is \emph{consistent} if $O$ and $RD$ are consistent. 
+A $KB = \langle O, RD \rangle$ is \emph{consistent} if $O$ and $RD$ is consistent. 
 \end{definition} 
 %
-Our goal is to identify whether  a statement $stm(p, s)$ is true at a time step $t$ for $t \ge s$ given a $KB$. We will develop a program $\Pi(KB)$ to answer this question. We assume a finite horizon of steps, denoted by $s(0), \ldots, s(k)$. We use $h(P,S)$ to encode that literal $P$ is true at step $S$. Furthermore, to simplify the use of $\Pi(KB)$ with current ASP solvers, we  encode a rule of the form \eqref{rule}  using {\bf (a)} the ASP atom $rule(r, head, name)$ and
-{\bf (b)} the set of ASP atoms $\{mem(l, name) \mid l \in body\}$, where \(name\) is a unique identifier for the rule; similar encodings are used for  \eqref{default} and \eqref{pref}. 
+Our goal is to identify the agent's beliefs and to use them to determine whether  a statement $stm(p, s)$ is true at a time step $t$ given $KB$. We will develop a program $\Pi(KB)$ to answer this question. We assume a finite horizon of steps, denoted by $s(0), \ldots, s(k)$. We use $h(L,S)$ to encode that fluent literal $L$ is true at step $S$. We use $believes(B,S)$ to represent that the agent believes $B$ at step $S$. Furthermore, to simplify the use of $\Pi(KB)$ with current ASP solvers, we  encode a rule of the form \eqref{rule}  using {\bf (a)} the ASP atom $rule(r, head, name)$ and
+{\bf (b)} the set of ASP atoms $\{mbr(l, name) \mid l \in body_{r}\}$, where \(name\) is a unique identifier for the rule; similar encodings are used for  \eqref{default} and \eqref{pref}. 
 This method of encoding is similar to what is used  in answer set planning and allows for the separation between  the encoding of the problem and the rules for reasoning with it.
-The main challenge to be addressed lies in the interaction between observations, defaults, etc. 
+The main challenge to be addressed lies in the interaction between observations and defaults. 
 We apply the following principles:
 %
- \begin{list}{$\bullet$}{\topsep=0pt \parsep=0pt \itemsep=0pt \leftmargin=10pt}
+\begin{itemize}
 \item[]{\bf (O)}ptimistic: The most recent observation reflects the true state of the world;
 \item[]{\bf (SK)}eptical: When conflicting conclusions can be drawn then do not believe in any.
-\end{list} 
+\end{itemize}  
+
+\iffalse
+An interesting challenge is related to the encoding of $\Phi_{Act}$ for the case in which the initial state is not completely specified.
+One possible option is to introduce an explicit encoding of the \emph{awareness axiom} \cite{GelfondKahl14a}, stating that the agent is aware that fluent literals may be either true or false:
+\[
+h(F,S) \vee h(L,S) \leftarrow fluent(F),neg(F,L).
+\]
+This approach allows to map each trajectory stemming from a different possible initial state to an answer set of the program. %Set  $W[t]$ is then obtained by computing the cautious consequences of the ASP program.
+\fi
+
+%In this paper, we discuss a slightly different, more economical approach, under the assumption that actions are deterministic. First of all,
 %
-$\Pi(KB)$ contains the set of facts encoding $O$ and $RD$ as described above. We next describe the rules in $\Pi(KB)$. 
+The first part of $\Pi(KB)$ contains the set of facts encoding $O$ and $RD$ as described above. Their semantics is captured by the following rules.\footnote{In the following, The  predicate $neg$ encodes the complement of a literal, i.e, $neg(f, \neg f)$ and $neg(\neg f, f)$ are facts of the program.}
 %
-The following rules are used to  reason about observations of the form 
-\eqref{obs}:\footnote{The  predicate $neg$ encodes the complement of a literal).}
+%The first set of rules encodes the \emph{awareness axiom} \cite{GelfondKahl14a}, stating that the agent is aware that fluent literals may be either true or false.
+%\[
+%h(F,S) \vee h(L,S) \leftarrow fluent(F),neg(F,L).
+%\]
+
+The first set of rules is used to  reason about observations of the form 
+\eqref{obs}:
 %
 \begin{eqnarray}  
-h(P, S)  & \leftarrow &   obs(P,S_1), s(S),  S_1 \le S, \naf nr(P, S_1, S).  \label{lp:obs} \\
+h(L, S)  & \leftarrow &   obs(L,S_1), s(S),  S_1 \le S, \label{lp:obs} \\
+&&\naf nr(L, S_1, S).    \nonumber\\
 %               \naf \:not\_most\_recent(P, S_1, S).  \nonumber \\
 % not\_most\_recent(P, S_1, S) \leftarrow s(S_1),  \label{lp:obs1}  \\ 
-  nr(P, U, S)  & \leftarrow &  s(U), neg(P,P_1), obs(P_1, V), s(S),  U {<} V, V {<} S.  \label{lp:obs1}  %\\ 
+  nr(L, U, S)  & \leftarrow &  s(U), neg(L,L_1), obs(L_1, V), s(S), \label{lp:obs1} \\
+  &&U {<} V, V {<} S.  \nonumber  %\\ 
 %obs(\overline{P}, S_2), s(S),  S_1 < S_2, S_2 < S. \nonumber
 \end{eqnarray} 
 
-These rules encode the principle {\bf (O)}. Rule \eqref{lp:obs1} states that $nr(P,S_1)$ is true if there exists a more recent observation of  $\neg P$. Rule \eqref{lp:obs} indicates that an observation stays true if every conflicting observation is `older'.
+These rules encode the principle {\bf (O)}. Rule \eqref{lp:obs1} states that $nr(L,S_1)$ is true if there exists a more recent observation of  $\neg L$. Rule \eqref{lp:obs} indicates that an observation stays true if every conflicting observation is `older'.
  
- For reasoning about rules  of the form \eqref{rule}, we have:  %
-{
+ For reasoning about statements of the form \eqref{rule}, we have:  %
+%
 \begin{equation}\label{lp:rule}
 \begin{array}{ll}
-h(H, S) \leftarrow & s(S),  rule(D, H, M),  N = \# count \{L : mem(L, M),  h(L, S) \},\\ 
-     & N  == \# count \{L : mem(L, M)\}.
+believes(H, S) \leftarrow & s(S),  rule(D, H, M),  \\
+        & N  = \# count \{L : mbr(L, M)\},\\
+        & \# count \{L : mbr(L, M),\\
+        &\hspace*{.8in}h(L, T) \}= N_h,  \\ 
+        & \# count \{L : mbr(L, M),\\
+        &\hspace*{.44in}believes(L, T) \}= N_b, \\
+        & N_h+N_b=N.  \\ 
+%
+%& N = \# count \{L : mbr(L, M),  h(L, S) \},\\ 
+%     & N  = \# count \{L : mbr(L, M)\}.
       \end{array}
 \end{equation} 
-}
+
 %
-This rule  says that if the body of a rule is satisfied then the head of the rule must be true. 
+Intuitively, (\ref{lp:rule}) states that, if the body of a $rule$ statement is satisfied, then its head must be true. Recall that, according to the syntax given earlier, the head is a belief -- hence the expression $believes(H,S)$ in (\ref{lp:rule}). Checking whether the body is satisfied is compactly achieved by leveraging the $\#count$ aggregate of the ASP Core 2 language\footnote{Details can be found in \cite{ASPCore2Standard}}, which calculates the cardinality of a set. For instance, the expression $\# count \{L : mbr(L, M), h(L, T) \}$ finds number of literals that are in the body of the rule ($mbr(L,M)$) and hold at time step $T$ ($h(L,T)$). The combination of aggregates present in (\ref{lp:rule}) checks that the number of literals that hold or are believed equals the size of the body of the rule.\footnote{Recall that fluent symbols and belief symbols are disjoint. }
 
  For reasoning about defaults  of the form \eqref{default} we have:
+% 
 %%\iffalse
 %{\small
-%\begin{align}
-%app(D, H, S) & \leftarrow   s(S), default(D, H, M),\label{lp:app} \\
-%      &NC  = \# count \{L : mem(L, M)\}, \nonumber \\ 
-%     & \# count \{L : mem(L, M),     h(L, T) \} == NC. \nonumber \\ 
-%ab(D, H, S)& \leftarrow   s(S), app(D, H, S),\label{lp:ab} \\
-%    &  app(D_1, \overline{H}, S),  %\nonumber \\
-%      \naf defeated(D_1, \overline{H}, S).  \nonumber      \\
-%defeated(D, H, S)& \leftarrow   s(S), app(D, H, S), h(\overline{H}, S).\label{lp:defeat0} \\
-%    &  app(D, H, S), % \nonumber \\
-%      h(\overline{H}, S). \nonumber \\       
-%defeated(D, H, S)& \leftarrow   s(S),  app(D, H, S), \label{lp:defeat} \\
-%    & app(D_1, \overline{H}, S), prefer(D_1, D, S).  \nonumber \\
-%%      prefer(D_1, D, S).  \nonumber      \\
-%%h(l_1, S), \ldots, h(l_k, S), \naf ab(d, l, S)   \label{lp:def}\\
-%%b(l, S) \leftarrow b(l_1, S), \ldots, b(l_k, S), \naf ab(d, l, S)   \label{lp:def_bel}\\
-%%app(d, l, S) \leftarrow h(l_1, S), \ldots, h(l_k, S) 
+\begin{eqnarray}
+app(D, H, S) & \leftarrow  &  s(S), default(D, H, M), \nonumber \\
+        & & N  = \# count \{L : mbr(L, M)\},    \nonumber\\
+        & & \# count \{L : mbr(L, M),  \nonumber\\
+        & & \hspace*{.8in}h(L, T) \}= N_h,  \nonumber\\ 
+        & & \# count \{L : mbr(L, M), \nonumber\\
+        & & N_h+N_b=N. \label{lp:app} \\ 
+%     & & NC  = \# count \{L : mbr(L, M)\}, \nonumber \\ 
+%    & & \# count \{L : mbr(L, M),     h(L, T) \} == NC. \nonumber \\ 
+ab(D, H, S)& \leftarrow &   s(S), app(D, H, S), \nonumber\\
+    & &  neg(H, H_1), app(D_1, H_1, S),  \nonumber \\
+    &&   \naf defeated(D_1, H_1, S).  \label{lp:ab}      \\
+defeated(D, H, S) & \leftarrow  & s(S), app(D, H, S), \nonumber\\
+        & &  neg(H,H_1), \nonumber \\
+        & &  believes(H_1, S).  \:\:\:  \label{lp:defeat0} \\ 
+defeated(D, H, S) & \leftarrow  & s(S),  app(D, H, S),    \nonumber \\ 
+        & &  neg(H,H_1), \nonumber \\ %
+        & & app(D_1, H_1, S), \nonumber\\
+        & & prefer(D_1, D, S).   \label{lp:defeat}\\
+believes(H, S) & \leftarrow & app(D, H, S), \nonumber \\
+        & & \naf ab(D, H, S), \nonumber\\
+        & & \naf defeated(D, H, S).  \label{lp:holds}
+%    
+%defeated(D, H, S)& \leftarrow &  s(S), app(D, H, S), h(\overline{H}, S).\label{lp:defeat0} \\
+%    &&  app(D, H, S),  \nonumber \\
+%    &&  h(\overline{H}, S). \nonumber \\       
+%defeated(D, H, S)& \leftarrow  & s(S),  app(D, H, S), \label{lp:defeat} \\
+%    && app(D_1, \overline{H}, S), prefer(D_1, D, S).  \nonumber \\
+%    &&  prefer(D_1, D, S).  \nonumber      \\
+%h(l_1, S), \ldots, h(l_k, S), \naf ab(d, l, S)   \label{lp:def}\\
+%b(l, S) \leftarrow b(l_1, S), \ldots, b(l_k, S), \naf ab(d, l, S)   \label{lp:def_bel}\\
+%app(d, l, S) \leftarrow h(l_1, S), \ldots, h(l_k, S) 
 %h(H, S)& \leftarrow  app(D, H, S), \naf ab(D, H, S),  \label{lp:holds} \\
-% % \naf ab(D, H, S), \nonumber \\ 
+% \naf ab(D, H, S), \nonumber \\ 
 % & \naf defeated(D, H, S). \nonumber 
-%\end{align} 
+\end{eqnarray} 
 %} 
 %%\fi
 %
+\iffalse
 {
         \[
         \begin{array}{llr}
-     app(D, H, S)  \leftarrow &  s(S), default(D, H, M),  
-        NC  = \# count \{L : mem(L, M)\},  & (9)\\ %\label{lp:app}
-        & \# count \{L : mem(L, M),     h(L, T) \} == NC.  \\ 
+     app(D, H, S)  \leftarrow &  s(S), default(D, H, M),  \nonumber\\
+        & N  = \# count \{L : mbr(L, M)\},  & \label{lp:app} \\
+        & \# count \{L : mbr(L, M),\\
+        &\hspace*{.8in}h(L, T) \}= N_h,  \\ 
+        & \# count \{L : mbr(L, M),\\
+        &\hspace*{.44in}believes(L, T) \}= N_b, \\
+        & N_h+N_b=N.  \\ 
         ab(D, H, S) \leftarrow  & s(S), app(D, H, S), neg(H,H_1), & (10)\\   %\label{lp:ab}
-        &  app(D_1, H_1, S),  \naf defeated(D_1, H_1, S).        \\
-        defeated(D, H, S) \leftarrow  & s(S), app(D, H, S), neg(H,H_1), h(H_1, S).  \:\:\: & (11) \\ %\label{lp:defeat0} 
+        &  app(D_1, H_1, S), \\
+        & \naf defeated(D_1, H_1, S).        \\
+        defeated(D, H, S) \leftarrow  & s(S), app(D, H, S), neg(H,H_1), \\
+        & believes(H_1, S).  \:\:\: & (11) \\ %\label{lp:defeat0} 
         defeated(D, H, S) \leftarrow  & s(S),  app(D, H, S), neg(H,H_1), & (12) \\  %\label{lp:defeat}
-        & app(D_1, H_1, S), prefer(D_1, D, S).   \\
-        h(H, S) \leftarrow & app(D, H, S), \naf ab(D, H, S), \naf defeated(D, H, S).  & (13) \\ %\label{lp:holds}
+        & app(D_1, H_1, S), \\
+        & prefer(D_1, D, S).   \\
+        believes(H, S) \leftarrow & app(D, H, S), \naf ab(D, H, S),\\
+        & \naf defeated(D, H, S).  & (13) \\ %\label{lp:holds}
         \end{array}
         \]
         }
 %
+\fi
+
+ 
 The rule for {\it app} defines when a default is \emph{applicable}, i.e., when its body is satisfied. The interaction between defaults and rules in the knowledge base are dealt with using rules for {\it ab} and {\it defeated}. The first rule
         for {\it defeated}  dismisses the applicability of a default if the complement of its conclusion is already established. The second rule for {\it defeated} expresses that a default is defeated if there is a  preferred default with a conflicting conclusion that is applicable.
-The rule for {\it ab} enforces the principle {\bf (SK)}. It states that a default $d$ should be blocked if there is another default with the conflicting conclusion ($\overline{h}$), which is not defeated.
+The rule for {\it ab} enforces the principle {\bf (SK)}. It states that a default $d$ should be blocked if there is another default with the conflicting conclusion ($h'$ in $neg(h, h')$), which is not defeated.
 Finally, the last rule  enforces the application of any default that is applicable and not otherwise blocked.
  
  \setcounter{equation}{13}
  
  For reasoning about preferences of the form \eqref{pref}, we employ the rules:
+% 
 {
 \begin{equation}\label{lp:pref}
 \begin{array}{ll}
-prefer(D_1, D_2, S) \leftarrow &  s(S),   prefer(D_1, D_2, M),   N  = \# count \{L : mem(L, M)\},  \\ 
-     & \# count \{L : mem(L, M),  h(L, S) \} {==} N. 
+prefer(D_1, D_2, S) \leftarrow &  s(S),   prefer(D_1, D_2, M),   \\
+     & N  = \# count \{L : \\
+     &  \hspace*{.3in} mbr(L, M)\},  \\ 
+     & \# count \{L : mbr(L, M),  \\
+     &  \hspace*{.3in}  h(L, S) \} {=} N_h, \\
+     & \# count \{L : mbr(L, M), \\
+     & \hspace*{.3in} believes(L, S) \} {=} N_b, \\
+     & N_h+N_b=N.
       \end{array}
 \end{equation} 
 }
+%
 This rule defines when a preference among two defaults can be applied. 
 %
 %\iffalse 
@@ -755,6 +984,24 @@ This rule defines when a preference among two defaults can be applied.
 %
 
 In summary, for a $KB = \langle O, RD \rangle$, $\Pi(KB)$ consists of rules~\eqref{lp:obs}--\eqref{lp:pref} and the set of facts encoding $RD$ and $O$.
+
+%
+\begin{proposition}
+For each consistent $KB$,  there exists no answer set of $\Pi(KB)$ that contains $believes(l, t)$ and $believes(\overline{l},t)$ for some 
+literal $l$ and time step $t$. 
+\end{proposition} 
+%
+\noindent
+{\bf Proof.}
+The proof of this proposition relies on the fact that $believes(l, t)$ is in an answer set $A$ if the logic program  rule \eqref{lp:rule} (or \eqref{lp:holds}) is satisfied by $A$. If a rule \eqref{lp:rule} is satisfied by $A$ then a $KB$ contains a rule $rule(r,l,body)$ and $body$ is satisfied by $A$. Because of the consistency of $KB$, we know that there exists no rule $rule(r', \overline{l}, body')$ such that $body'$ is satisfied by $A$. For otherwise, $KB$ is inconsistent. This will imply that for every default $default(d, \overline{l}, body')$, if the default is applicable then the body of the rule \eqref{lp:defeat0} is satisfied and therefore $defeated(d)$ belongs to $A$. Consequently, the rule \eqref{lp:holds} is not satisfied for the default $d$, and hence, $believes(\overline{l}, t)$ cannot belong to $A$.
+
+Similar argument can be used to argue for the case that two defaults, one supporting $l$ and another supporting $\overline{l}$, given that $KB$ is consistent can never be applied at the same time to create both $believes({l}, t)$ and $believes(\overline{l}, t)$ in an answer set.
+\hfill\qedsymbol{}
+
+
+
+
+
 %
 \begin{example} \label{ex2}  
 The story in Example~\ref{ex1} 
@@ -762,7 +1009,7 @@ can be represented by the $KB_1 = \langle  O_1, RD_1 \rangle$ where
 %$O_1 = \{obs(in\_college, 1), obs(has\_scholarship, 2)\}$ and  
 %$RD_1 = \{default(d_1, \neg poor, [in\_college])$,
 %$default(d_2, poor, [has\_scholarship])\}$.
-%
+
 {
 \[
 \begin{array}{lll}
@@ -782,21 +1029,22 @@ default(d_2, poor, [has\_scholarship]).
 \end{array} 
 \]
 }
-%
+
+
 The statement in Example~\ref{ex1} can be represented by  $stm(poor, 0).$ 
 Consider   $\Pi(KB_1)$ with $k=0,1,2$:  
 %
- \begin{list}{$\bullet$}{\topsep=0pt \parsep=0pt \itemsep=0pt \leftmargin=10pt}
-\item   $k=0$: since there is no observation, no answer set of $\Pi(KB_1)$ contains any atom of the form $h(l, 0)$; %where $l$ is a literal.
+\begin{itemize} 
+\item   $k=0$: since there is no observation, no answer set of $\Pi(KB_1)$ contains any atom of the form $believes(poor, 0)$; %where $l$ is a literal.
  
-\item   $k=1$: because $obs(in\_college,1)$, $h(in\_college,1)$ is true, 
+\item   $k=1$: because of $obs(in\_college,1)$, $h(in\_college,1)$ is true, 
 %% is in every answer set of $\Pi(KB_1)$.  
-$d_1$ is applicable but $d_2$ is not.  So, every answer set of $\Pi(KB_1)$ contains    $h(in\_college, 1)$ and $h(\neg poor, 1)$.  
+$d_1$ is applicable but $d_2$ is not.  So, every answer set of $\Pi(KB_1)$ contains    $h(in\_college, 1)$ and $believes(\neg poor, 1)$.  
 
 \item   $k=2$: %every answer set of $\Pi(KB_1)$ contains 
-$h(has\_scholarship,2)$, $h(in\_college,1)$, and $h(in\_college,2)$ are true and $d_1$ is applicable at 1 and 2; $d_2$ is not applicable at   1 but is applicable at   2.  Hence, every answer set of $\Pi(KB_1)$ contains $h(\neg poor, 1)$.  However, none of the answer set   contains $h(poor, 2)$ or $h(\neg poor, 2)$.  
+$h(has\_scholarship,2)$, $h(in\_college,1)$, and $h(in\_college,2)$ are true and $d_1$ is applicable at 1 and 2; $d_2$ is not applicable at   1 but is applicable at   2.  Hence, every answer set of $\Pi(KB_1)$ contains $believes(\neg poor, 1)$.  However, none of the answer set   contains $believes(poor, 2)$ or $believes(\neg poor, 2)$.  
 
-\end{list} 
+\end{itemize}  
 
 
 
@@ -837,55 +1085,68 @@ $h(has\_scholarship,2)$, $h(in\_college,1)$, and $h(in\_college,2)$ are true and
 %\end{verbatim} 
 \end{example} 
  
-Given a $KB=\langle O, RD \rangle$ over $\cal L$, 
-an integer $k$, and a $stm(l,s)$, we 
+Given a $KB=\langle O, RD \rangle$, 
+an integer $k$, and a $stm(b,s)$, we 
 are interested in determining the truthfulness of the statement 
 at time steps $s \le t \le k$. %This is defined as follows. 
 
 \begin{definition} \label{kb:entail}
-Let $KB =  \langle O,RD \rangle$ be a knowledge base. Let $stm(l,s)$ be a statement about a literal $l$ at 
-the time step $s$ and $t$ be a time step such that $t \ge s$. We say that 
- \begin{list}{$\bullet$}{\topsep=0pt \parsep=0pt \itemsep=0pt \leftmargin=5pt} 
-\item $KB \models {+}stm(l,s)@t$ (or $stm(l, s)$ 
-is \emph{true} w.r.t. $KB$ at   $t$)  if  $h(l,t) \in A$ for every answer set $A$ of $\Pi(KB)$; 
-\item $KB \models {-}stm(l,s)@t$ (or 
-$stm(l, s)$ 
-is \emph{false} w.r.t. $KB$  at  $t$)  if  $h(\overline{l},t) \in A$ for every answer set $A$ of $\Pi(KB)$;
-\item $KB \not\models {\pm}stm(l,s)@t$ (or 
-$stm(l, s)$ 
-is \emph{unknown} w.r.t. $KB$  at  $t$)    
-if $KB \not\models +stm(l,s)@t$ and $KB \not\models -stm(l,s)@t$.
+Let $KB =  \langle O,RD \rangle$ be a knowledge base. Let $stm(b,s)$ be a statement about a belief literal $b$ at 
+the time step $s$. For each time step $t$ such that $t \ge s$, we say that 
+\begin{itemize} 
+\item $KB \models {+}stm(b,s)@t$ (or $stm(b, s)$ 
+is believed to be \emph{true} w.r.t. $KB$ at   $t$)  if  $believes(b,t) \in A$ for every answer set $A$ of $\Pi(KB)$; 
+\item $KB \models {-}stm(b,s)@t$ (or 
+$stm(b, s)$ 
+is believed to be \emph{false} w.r.t. $KB$  at  $t$)  if  $believes(\overline{b},t) \in A$ for every answer set $A$ of $\Pi(KB)$;
+\item $KB \not\models {\pm}stm(b,s)@t$ (or 
+$stm(b, s)$ 
+is \emph{undecided} w.r.t. $KB$  at  $t$)    
+if $KB \not\models +stm(b,s)@t$ and $KB \not\models -stm(b,s)@t$.
 
-\end{list} 
+\end{itemize}  
 \end{definition} 
 
-Intuitively, $KB  \models {+}stm(l,s)@t$ (resp. $KB  \models {-}stm(l,s)@t$) says that at the time step $t$ the statement is true (resp. false). $KB \not\models {\pm}stm(l,s)@t$ states that there is no information that supports or denies the statement at the time step $t$. Observe that $l$, $t$, and $s$ are constants representing the question whether or not $stm(l,s)$ is true at step $t$. As such, requiring $h(l,t)$ to be in every answer set of the program 
-does not mean that $h(l,t)$ belongs to every answer set for every $t$ such that $s \le t \le k$. 
+Intuitively, $KB  \models {+}stm(b,s)@t$ (resp. $KB  \models {-}stm(b,s)@t$) says that at the time step $t$, at the same time step or later than the time step that the statement about $b$ is made, the statement is believed to be true (resp. believed to be false). $KB \not\models {\pm}stm(b,s)@t$ states that there is no information that supports or denies the statement at the time step $t$. Observe that $l$, $t$, and $s$ are constants representing the question whether or not $stm(b,s)$ is believed to be true at step $t$. As such, requiring $believes(b,t)$ to be in every answer set of the program 
+does not mean that $believes(b,t)$ belongs to every answer set for every $t$ such that $s \le t \le k$. 
 Observe that this entailment can be computed in ASP by the following rules: 
 %
 {
-\begin{align}
-\mathtt{t}(H, T) \leftarrow stm(H, S), s(T), T \ge S, h(H, T).\label{q1} \\ 
-\mathtt{f}(H, T) \leftarrow stm(H, S), s(T), T \ge S, neg(H,H_1), h(H_1, T). \label{q2} \\ 
-\mathtt{u}(H, T) \leftarrow stm(H, S), s(T), T \ge S, neg(H,H_1), \naf h(H, T), \naf h(H_1, T). \label{q3} 
-\end{align}  
+\begin{eqnarray}
+\mathtt{t}(H, T) & \leftarrow & stm(H, S), s(T), T \ge S, \nonumber \\
+        &  & believes(H, T). \label{q1} \\ 
+\mathtt{f}(H, T) & \leftarrow & stm(H, S), s(T), T \ge S, neg(H,H_1),  \nonumber\\ 
+& & believes(H_1, T).  \label{q2}\\
+\mathtt{u}(H, T) & \leftarrow & stm(H, S), s(T), T \ge S, neg(H,H_1), \nonumber  \\
+& & \naf believes(H, T), \nonumber \\
+&&  \naf believes(H_1, T). \label{q3}
+\end{eqnarray}
 }
 %
 Let $\Pi_Q = \Pi(KB) \cup \{\eqref{q1}{-}\eqref{q3}\}$. It can be shown that 
- $KB  \models {+}stm(l,s)@t$, $KB  \models {-}stm(l,s)@t$, and  $KB  \models {\pm}stm(l,s)@t$ 
- correspond to $\Pi_Q \models \mathtt{t}(l,t)$, $\Pi_Q \models \mathtt{f}(l,t)$, and 
- $\Pi_Q \models \mathtt{u}(l,t)$, respectively. Hence, we can compute the truthfulness of a statement 
+ $KB  \models {+}stm(b,s)@t$, $KB  \models {-}stm(b,s)@t$, and  $KB  \models {\pm}stm(b,s)@t$ 
+ correspond to $\Pi_Q \models \mathtt{t}(b,t)$, $\Pi_Q \models \mathtt{f}(b,t)$, and 
+ $\Pi_Q \models \mathtt{u}(b,t)$, respectively. Hence, we can compute the truthfulness of a statement 
 using two calls to an ASP-solver. 
  
  %For example, if the program $$\Pi_Q \cup \{\leftarrow \naf \mathtt{f}(l,t), \naf \mathtt{u}(l,t).\}$$ does not have an answer set and the program $$\Pi_Q \cup \{\leftarrow \naf \mathtt{t}(l,t)\}$$ has an answer set then we can conclude that $\Pi_Q \models \mathtt{t}((l, t)$. 
 
 \begin{proposition} 
-If  $\Pi_Q \cup \{\leftarrow \naf \mathtt{f}(l,t), \naf \mathtt{u}(l,t).\}$ does not have an answer set and  
-$\Pi_Q \cup \{\leftarrow \naf \mathtt{t}(l,t)\}$  
-(resp. $\Pi_Q \cup \{\leftarrow \naf \mathtt{f}(l,t)\}$)  has an answer set then   $\Pi_Q \models \mathtt{t}(l, t)$
-(resp.  $\Pi_Q \models \mathtt{f}(l, t)$). 
+For $\mathtt{x} \in \{\mathtt{t, b, u}\}$,
+if  $\Pi_Q \cup \{\leftarrow  \mathtt{x}(b,t).\}$ does not have an answer set and  
+$\Pi_Q \cup \{\leftarrow \naf \mathtt{x}(b,t)\}$   has an answer set then   $\Pi_Q \models \mathtt{x}(b, t)$. 
 \end{proposition}  
 % 
+\noindent
+{\bf Proof.}
+Observe that $\Pi_Q \cup \{\leftarrow \mathtt{x}(b,t).\}$ does not have an answer set 
+implies that $\Pi_Q$ either has no answer set or every answer set of $\Pi_Q$
+contains $\mathtt{x}(b,t)$. The second condition implies that $\Pi_Q$ has at least one answer set. 
+This implies that  $\Pi_Q \models \mathtt{x}(b, t)$.  
+\hfill\qedsymbol{}
+
+\medskip
+The above proposition allows us to compute the entailment $KB \models {+}/{-}/{\pm} stm(b,s)@t$ by making two calls to the answer set solver. 
 %%\memo{formalize as proposition} 
 % 
 %It is easy to see that the following holds 
@@ -895,86 +1156,75 @@ We can show that
  $KB_1 \not\models {\pm}stm(poor,0)@2$. 
 
 %%
-% \begin{list}{$\bullet$}{\topsep=0pt \parsep=0pt \itemsep=0pt}
+%  \begin{itemize}
 %\item $KB_1 \not\models {\pm}stm(poor,0)@0$;
 %
 %\item $KB_1 \models   {-}stm(poor,0)@1$; and
 %
 %\item $KB_1 \not\models {\pm}stm(poor,0)@2$. 
-%\end{list} 
-%
-\begin{proposition}
-For each consistent $KB$,  there exists no answer set of $\Pi(KB)$ that contains $h(l, t)$ and $h(\overline{l},t)$ for some 
-literal $l$ and time step $t$. 
-\end{proposition} 
-%
-For the sake of our discussion, let us consider $KB_2 = \langle  O_1 , RD_1 \cup \{prefer(d_2,d_1,[])\} \rangle$. 
+%\end{itemize}  
+
+For the sake of our discussion, let us consider $KB_2 = \langle  O_1 , R_{1,}D_1 \cup \{prefer(d_2,d_1,[])\} \rangle$. 
 It is easy to see that  every  answer set of $\Pi(KB_2)$ contains $defeated(d_1, \neg poor, 2)$. As such, we have that 
 $KB_2 \not\models {\pm}stm(poor,0)@0$;
  $KB_2 \models   {-}stm(poor,0)@1$; and
  $KB_2  \models {+}stm(poor,0)@2$. 
  
-% \begin{list}{$\bullet$}{\topsep=0pt \parsep=0pt \itemsep=0pt}
+%  \begin{itemize}
 %\item $KB_2 \not\models {\pm}stm(poor,0)@0$;
 %
 %\item $KB_2 \models   {-}stm(poor,0)@1$; and
 %
 %\item $KB_2  \models {+}stm(poor,0)@2$. 
-%\end{list} 
+%\end{itemize}  
 
 
  
 \subsection{Reasoning With Observations about Action Occurrences} 
 
-We will now extend our signature with a set of actions $\cal A$ %that can be observed. We 
-and assume that each action is  associated with a set of literals, called its \emph{preconditions}, and a second
- set of literals, called its \emph{effects}
-\cite{GelfondL98}. This information is encoded in statements of the   form: 
+In this section, we shift our focus to set $A$ of actions from the action signature $\langle F, B, A \rangle$. Following common practice in action languages \cite{GelfondL98}, we assume that each action is  associated with a set of literals, called its \emph{effects}, with each effect potentially predicated on a different set of literals, called \emph{preconditions}. A third set of literals, the \emph{executability conditions}, states when the action can be executed vs impossible. This information is encoded in statements of the form: 
 $exec(a,body)$ and $causes(a,p,body)$ 
 %\begin{align}
 % exec(a,body) \label{exec} \\
 % causes(a,p,body) \label{effect} 
 %\end{align}
 %
-where $a \in {\cal A}$ is an action, $p$ is a literal, and $body$ is a set of literals. 
- We will represent an \emph{action occurrence observation} (or {\em action occurrence}) by a statement of the form
+where $a \in A$ is an action, $p$ is a fluent literal, and $body$ is a set of fluent literals. 
+ The first statement gives the executability conditions of action $a$, while the second states that, when $body$ holds, $p$ is one effect of $a$. We represent an \emph{action occurrence observation} (or {\em action occurrence}) by a statement of the form
  $occ(a,s)$
 %\begin{equation}\label{occu}
 %occ(a,s)
 %\end{equation}
-where $a\in {\cal A}$ and $s$ is a non-negative integer. The notion of a knowledge base is extended to allow 
- action occurrence observations in a straightforward way: a knowledge base $KB$ is a pair 
- $\langle O, RD \rangle$ where  $O$ is a set of observations and action occurrences and 
- $RD$ is a collection of rules, defaults, preferences, and action descriptions. To reason with action occurrences, we add rules to deal with action occurrences in $O$ to $\Pi(KB)$. 
- We use the encoding of a set of literals used for rules and defaults in the previous section. 
-Since an action occurrence can be viewed as a set of observations,
-we add to $\Pi(KB)$ the following rules:
+where $a\in A$ and $s$ is a time step. Recall that the notion of knowledge base already supports providing action occurrence observations, as  $H^{n}$ is a set of observations and action occurrences. The semantics of the above statements is encoded by suitable rules added to $\Pi(KB)$. 
+ Note that the body of $exec$ and $causes$ statements is encoded by means of the $mbr$ predicate, as we did for rules and defaults in the previous section. 
+We add to $\Pi(KB)$ the following rules:
  %and can be encoded   as follows. 
 %
 \begin{eqnarray}
-obs(L, S)  & \leftarrow & s(S), occ(A, S), exec(A, M), mem(L, M).    \label{lp:exec}  \\ 
-obs(L, S+1) & \leftarrow & s(S),     occ(A, S), causes(A, L, M),  N  = \# count \{X : mem(X, M)\},  \label{lp:effect}\\
-& & \# count \{X : mem(X, M),  h(X, T) \} == N  \nonumber
+obs(P, S)  & \leftarrow & s(S), occ(A, S), exec(A, M), \label{lp:exec} \\
+& & mbr(P, M).  \nonumber    \\ 
+obs(L, S+1) & \leftarrow & s(S),     occ(A, S), causes(A, L, M),\\
+& &  N  = \# count \{X : mbr(X, M)\},  \label{lp:effect} \nonumber\\
+& & \# count \{X : mbr(X, M),  h(X, T) \} = N  \nonumber
 \end{eqnarray} 
 
-Rule \eqref{lp:exec} indicates that the observation of an action occurrence allows us to infer that the preconditions
-must be satisfied---we capture this by generating new observations about the time step in which the action has occurred.
-Rule \eqref{lp:effect} allows us to observe the consequences of an action from knowledge of its occurrence.
+Rule \eqref{lp:exec} indicates that the observation of an action occurrence allows us to infer that its executability conditions must be satisfied---we capture this by generating new observations about the time step in which the action has occurred.
+In rule \eqref{lp:effect}, we take the approach of encoding the effects of an action occurrence as observations; the rule allows us to observe the consequences of an action from knowledge of its occurrence.
 
 %
 %\begin{equation} \label{lp:exec} 
 %\begin{array}{l}
 %obs(L, S) {\leftarrow} s(S), 
 %   occ(A, S), exec(A, M), 
-%   mem(L, M).    
+%   mbr(L, M).    
 %   \end{array}
 %\end{equation}
 %\begin{equation} \label{lp:effect}
 %\begin{array}{l}
 %obs(L, S+1) \leftarrow s(S),     
 %   occ(A, S), causes(A, L, M), \\ 
-%    \hspace{.5cm}  N  = \# count \{X : mem(X, M)\},  \\ 
-% \hspace{.5cm}  \# count \{X : mem(X, M),  h(X, T) \} == N
+%    \hspace{.5cm}  N  = \# count \{X : mbr(X, M)\},  \\ 
+% \hspace{.5cm}  \# count \{X : mbr(X, M),  h(X, T) \} == N
 % \end{array}
 %\end{equation}   
 
@@ -993,7 +1243,7 @@ Definition~\ref{kb:entail}
 
 \begin{example}\label{ex3} 
 %%Let us a
-Assume that buying a house near John's university, in Exp.~\ref{ex1},
+Assume that buying a house near John's university, in Example~\ref{ex1},
  requires an  amount of money that only wealthy people can afford. The effect and precondition of the action (denoted by $Act$) 
  can be represented by  
 $cause(buy\_house, has\_house, [])$ and $exec(buy\_house, [\neg poor])$. 
@@ -1010,7 +1260,7 @@ indicates that $\neg poor$ is observed at time 2 and, thus,  the default $d_2$ i
 % Static should be the same as rules
 % 
 % Dynamic: if $a \causesif{\ell} \ell_1\wedge\dots\wedge\ell_n$:
-% \begin{list}{$\bullet$}{\topsep=1pt \parsep=0pt \itemsep=1pt}
+%  \begin{itemize}
 % \item If the action is present, its effects should hold:
 %         \begin{align}
 %         h(\ell,s+1) \leftarrow occ(a,s), h(\ell_1,s),\dots, h(\ell_n,s)
@@ -1028,7 +1278,7 @@ indicates that $\neg poor$ is observed at time 2 and, thus,  the default $d_2$ i
 %          h(\ell_i,s) \leftarrow& occ(a,s), h(\ell,s+1), \\
 %                                        &  not \:h(\bar{\ell_1},s), \dots, not\: h(\bar{\ell_n},s)
 %          \end{align}
-% \end{list}
+% \end{itemize} 
 % 
 % Use executability conditions as well?
 % 
@@ -1040,6 +1290,7 @@ indicates that $\neg poor$ is observed at time 2 and, thus,  the default $d_2$ i
  
 % \section{Observations and Statements with Preferences and Biases}
 
+\if 0
 \section{\textcolor{red}{[REMOVE]} Supporters and Denials} 
 
 The previous section shows that we can compute the truthfulness of a statement given 
@@ -1053,37 +1304,37 @@ a given statement w.r.t. her knowledge base by identifying the set of
 observations that the observer needs to have. 
 
 
-Given a $KB = \langle O, RD \rangle$, we will use $now$ to denote a specific time step 
-such that for every $obs(l, t)$ or $occ(a,t)$ in $O$, $now > t$. 
+Given a $KB = \langle H^{n}, R,D \rangle$, we will use $now$ to denote a specific time step 
+such that for every $obs(l, t)$ or $occ(a,t)$ in $H^{n}$, $now > t$. 
 For a consistent set of literals $L$, let 
 $OBS(L) = \{obs(l, now) \mid l \in L\}.$ 
 The notions of supporters and denials are defined next. 
 
 \begin{definition} 
-Let $KB  = \langle O, RD \rangle$ be a knowledge base.  Let $L$ be a consistent set of literals. 
- \begin{list}{$\bullet$}{\topsep=0pt \parsep=0pt \itemsep=0pt \leftmargin=10pt}
-\item  $L$ is said to be a \emph{supporter} of a literal $l$ w.r.t. $KB$  
-if:  $\langle O  \cup OBS(L) , RD \rangle \models {+}stm(l,0)@now$;  
+Let $KB  = \langle H^{n}, R,D \rangle$ be a knowledge base.  Let $L$ be a consistent set of literals. 
+  \begin{itemize}
+\item  $L$ is said to be a \emph{supporter} of a belief literal $b$ w.r.t. $KB$  
+if:  $\langle H^{n}  \cup OBS(L) , R,D \rangle \models {+}stm(b,0)@now$;  
 
-\item $L$ is said to be a \emph{denial} of a literal $l$ w.r.t. $KB$ 
-if: $\langle O  \cup OBS(L) , RD \rangle\models {-}stm(l,0)@now$. 
-\end{list} 
+\item $L$ is said to be a \emph{denial} of a belief literal $b$ w.r.t. $KB$ 
+if: $\langle H^{n}  \cup OBS(L) , R,D \rangle\models {-}stm(b,0)@now$. 
+\end{itemize}  
 %where $KB \cup OBS(L) =  \langle O  \cup OBS(L) , RD \rangle$. 
 %
 $L$ is a \emph{minimal supporter (or denial)} of $l$  w.r.t. $KB$ if it is a subset minimal 
 supporter (or denial) of $l$ w.r.t. $KB$.
 \end{definition} 
 %
-The intuition behind the above definition is that a supporter (resp. denial) of a literal $l$ is a set of literals 
-whose truth values need to be established before the truthfulness of a statement about $l$ can be determined. %Of course, 
+The intuition behind the above definition is that a supporter (resp. denial) of a belief literal $b$ is a set of literals 
+whose truth values need to be established before the truthfulness of a statement about $b$ can be determined. %Of course, 
 Clearly, if an observer can observe every literal % in $\cal L$
-then she would be able to determine the truthfulness of a statement about $l$. However, it is desirable to consider minimal supporters/denials. We next discuss possible ways to compute minimal supporters (resp. denials) of a statement about a literal $l$. 
+then she would be able to determine the truthfulness of a statement about $b$. However, it is desirable to consider minimal supporters/denials. We next discuss possible ways to compute minimal supporters (resp. denials) of a statement about a literal $b$. 
 
 \subsection{\textcolor{red}{[REMOVE]} ASP Computation}
  
 %\subsection{Computing Minimal Supporters/Denials} 
 
-A minimal supporter/denial of a literal $l$ w.r.t. $KB$ can be computed using $\Pi(KB)$ and a few extra rules that generate observations and evaluate the truth value of $l$ at the step $now$.
+A minimal supporter/denial of a belief literal $b$ w.r.t. $KB$ can be computed using $\Pi(KB)$ and a few extra rules that generate observations and evaluate the truth value of $l$ at the step $now$.
 
 \begin{eqnarray}
  \{obs(P, now); obs(\neg P, now)\} 1 &\leftarrow  &   fluent(P).     \label{lp:generate} \\  
@@ -1113,11 +1364,11 @@ N(l) &= &  \Pi(KB) \cup  \{\eqref{lp:generate}, \eqref{lp:count}, \eqref{lp:min}
 %
 It is easy to see that the following holds: 
 \begin{proposition} 
-For a $KB = \langle O, RD \rangle$ and a literal $l$, 
-\begin{list}{$\bullet$}{\itemsep=0pt \topsep=0pt \parsep=0pt \leftmargin=10pt} 
+For a $KB = \langle O, R,D \rangle$ and a literal $l$, 
+\begin{itemize} 
 \item For every answer set $A$ of $P(l)$,  $L = \{l \mid obs(l, now) \in A\}$ is a minimal supporter of $l$ w.r.t. $KB$. 
 \item For every answer set $A$ of $N(l)$,  $L = \{l \mid obs(l, now) \in A\}$ is a minimal denial of $l$ w.r.t. $KB$. 
-\end{list}
+\end{itemize} 
 \end{proposition} 
 Observe that $P(l)$ and $N(l)$ compute cardinality-minimal supporters and denials of $l$ w.r.t. $KB$. 
 Since minimal-cardinality  implies subset minimality but the reverse is not true,  
@@ -1167,29 +1418,104 @@ obs(\neg P, now) \cra fluent(P). \label{lp:cra2}
 We can show the following 
 \begin{proposition} 
         For a $KB = \langle O, RD \rangle$ and a literal $l$, 
-        \begin{list}{$\bullet$}{\topsep=1pt \parsep=0pt \itemsep=1pt}
+        \begin{itemize}
                 \item A set of literals $L$  is a minimal supporter of $l$ with respect to $KB$ iff there exists an 
                 answer set $A$ of $(\Pi^+(KB),\Pi^C)$ such that $L = \{l \mid obs(l, now) \in A\}$.
                 
                 \item A set of literals $L$  is a minimal denial of $l$ with respect to $KB$ iff there exists an 
                 answer set $A$ of $(\Pi^-(KB),\Pi^C)$ such that $L = \{l \mid obs(l, now) \in A\}$.
                 
-        \end{list}
+        \end{itemize} 
 \end{proposition}
-
+\fi
  
 
-\section{An Application} 
+\section{Applications} 
+
+As a potential application for our framework, consider the following scenario. Bob is walking in a good area of the city when, suddenly, a person appears, brandishing a knife and displaying a menacing demeanor. At some point during the confrontation, Bob shoots and kills the person. A court needs to decide whether Bob acted in self-defense or not. Simplifying somewhat, we will assume that the only relevant law says that one acted in self-defense if they believed to be in imminent danger.
+
+To make the example more meaningful, suppose the police found that the knife the person was holding was fake. Thus, we can identify two possible scenarios:
+
+    1. When Bob shot the person, he had not yet noticed that the knife was fake. We could expect to conclude that at that time Bob believed to be in imminent danger.
+
+    2. If instead Bob shot the person after observing that the knife was fake, we could expect to conclude that, at the time of the shooting, Bob did not believe to be in imminent danger.
+
+Assume that the police is able to tell when Bob shot the person and when he observed that the knife was fake, for example thanks to a reliable witness who saw the events from Bob's same perspective\footnote{In an actual case, other considerations may play a role, e.g. the reliability of the witness or whether the perspective was really the same. These complications are outside the scope of our example.}. We will demonstrate the use of our framework to reason about the evolution of Bob's beliefs and determine if he acted in self-defense.
+
+A possible formalization of the knowledge base from this example is the following set $RD^s$ of statements:
+
+\begin{lstlisting}[language=clingo,caption=Set $RD^s$ of statements for the self-defense example, label=lst:pi_S, mathescape=true,xleftmargin=.01\textwidth, breaklines=true]
+causes(appears(X),is(X,present),[]).
+default($d^s_1$,inImminentDanger,[has(att,k),
+  is(att,present),is(att,menc)])
+default($d^s_2$,-inImminentDanger,[has(att,k),
+  is(att,present),is(att,menc),is(k,fake)])
+prefer($d^s_2$,$d^s_1$, [ ]).
+default($d^s_3$,-inImminentDanger,
+  [at(a1), is(a1,good)])
+prefer($d^s_1$,$d^s_3$, [ ]).
+\end{lstlisting}
+The representation uses fluents $has(p,o)$ (p has/holds object o), $is(o,a)$ (object o has attribute a), and $at(l)$ (Bob is at location $l$). The objects are $k$ (the knife), $a1$ (the good area of the city), and $att$ (the attacker). Additionally, we use contants $present$ (for attribute ``physically present''), $fake$ (attribute of the knife), $menc$ (menacing-looking), and $good$ (attribute of the area of the city). The actions are $appears(p)$ (person $p$ appears) and $shoots(p)$ (Bob shoots $p$). The effect of the former is described by the $causes$ statement; the latter action has no effects within the scope of the example. The intuitive meaning of the defaults is:
+\begin{itemize}
+\item $d^s_1$: If there is someone who is menacing-looking and holding a knife, one will normally believe to be in imminent danger
+\item $d^s_2$: In the above case, if the knife is fake, one will not normally believe to be in imminent danger
+\item $d^s_3$: One does not normally believe to be in imminent danger in a good area of the city
+\end{itemize} 
+As can be seen from the $prefer$ statements, $d^s_2$ is the most preferred default and $d^s_3$ the least preferred.
+The initial part of the story is captured by:
+\[
+\begin{array}{lll}
+O^s_{init}  =  \left\{
+\begin{array}{ll} 
+obs(at(a1),0).   %\ \ \ \ 
+& obs(is(a1,good),0). \\
+obs(\neg is(att,present),0). & 
+hpd(appears(att),0). \\    % the guy appears
+obs(is(att,menc),1). &  %\ \ \ \     % the guy is menacing-looking
+obs(has(att,k),1).
+\end{array}
+\right\}
+\end{array}
+\]
+Let us consider what our framework yields for $KB^s_{init}=\langle O^s_{init},RD^s \rangle$. One can check that the answer set of $\Pi(KB^s_{init})$ contains $h(at(a1),0)$ and $h(is(a1,good),0)$. The only applicable default is $d^s_3$, yielding $believes(\neg inImminentDanger,0)$, i.e. Bob does not believe to be in imminent danger at time step $0$. The two possible evolutions of the story are formalized as follows:
+\begin{itemize}
+\item Scenario 1: \[
+\begin{array}{lll}
+O^s_{1} & = & \left\{
+\begin{array}{l} 
+hpd(shoots(bob,att),1). 
+\end{array}
+\right\}\\
+\ \\
+\multicolumn{3}{l}{KB^s_1=\langle O^S_{init} \cup O^s_1,RD^s \rangle}
+\end{array}
+\]
+The time step of interest is $1$. Note that $h(is(att,menc),1)$ and $h(has(att,k),1)$ follow trivially from the observations. Defaults $d^s_1$ and $d^s_3$ are thus applicable, while $d^{s}_2$ is not.  Because $d^s_1$ is preferred to $d^s_3$, the answer set of $\Pi(KB^s_1)$ contains $believes(inImminentDanger, 1)$, meaning that, at that time Bob pulled the trigger, he believed to be in imminent danger at the time of the shooting. It is worth noting how the framework is able to capture the evolution of Bob's beliefs over time.  
+\item Scenario 2: \[
+\begin{array}{lll}
+O^s_{2} & = & \left\{
+\begin{array}{l} 
+obs(is(k,fake),1). \\   % the knife is fake
+hpd(shoots(bob,att),1).
+\end{array}
+\right\} \\
+\ \\
+\multicolumn{3}{l}{KB^s_2=\langle O^S_{init} \cup O^s_2,RD^s \rangle}
+\end{array}
+\]
+At time step $1$, Bob has observed that the knife is fake and, thus, $h(is(k,fake),1)$ holds. Hence, all defaults are applicable.  Because $d^s_2$ is preferred to $d^s_1$, the answer set of $\Pi(KB^s_2)$ contains $believes(\neg inImminentDanger, 1)$. That is, Bob did not initially believe to be in imminent danger and did not believed so at the time of the shooting as well. 
+\end{itemize}
 
 % application.tex
 
-One interesting application of our framework is the detection of \emph{Man-in-the-Middle} (MITM) attacks targeting computer and cyber-physical systems.  In a MITM attack, the attacker secretly places itself as an intermediary between two communicating parties, relaying the information between them. By intercepting the communications, the attacker may steal valuable information, or even alter the information exchanged between the parties and fool them into performing unintended or undesirable actions. 
+For another demonstration of our framework, consider the problem of detecting \emph{Man-in-the-Middle} (MITM) attacks targeting computer and cyber-physical systems.  In a MITM attack, the attacker secretly places itself as an intermediary between two communicating parties, relaying the information between them. By intercepting the communications, the attacker may steal valuable information, or even alter the information exchanged between the parties and fool them into performing unintended or undesirable actions. 
 For example, a MITM attack was used in Stuxnet,\footnote{\tiny \url{https://en.wikipedia.org/wiki/Stuxnet}} a sophisticated malicious software (malware) that targeted certain models of industrial Programmable Logic Controllers (PLCs). Stuxnet is remarkable in that it is reported to have been successful in impacting industrial systems involved in Iran's nuclear enrichment program. Its success has major implications on the security  of industrial systems world-wide.
 
 %
 \begin{figwindow}[3,r,%
         {\includegraphics[width=.5\textwidth]{mim}},%
         {MITM attack carried out by Stuxnet: safe commands sent by the PLC (green) are replaced by dangerous ones (red); alarm readings from the centrifuge's sensors (red) are replaced by  safe ones\label{fig:stuxnet}}]
+\end{figwindow}
 The behavior of Stuxnet's MITM component is outlined in Figure \ref{fig:stuxnet}. Its component operates by intercepting the commands sent by a PLC to a connected centrifuge. The malware first increased the speed of the centrifuge above normal levels for a short amount of time, and later slowed it down below normal levels for a longer period of time. It is believed that the resulting stress caused components of the centrifuge to expand and eventually destroy it. Under normal conditions, sensors installed in the centrifuge would have alerted the PLC---and its users---about the abnormal conditions, giving them a chance to shut down the system before damage occurred. However, as part of the MITM attack, Stuxnet also intercepted the sensor readings from the centrifuge, and sent to the PLC fake readings based on previous recordings that indicated that the system was operating normally (this is known as a \emph{replay attack}). 
 
 A seriously concerning feature of MITM attacks is their ability to take control of the involved parties' inputs and outputs, making the attack virtually undetectable to the parties. In this section, we show that detection of a MITM attack is indeed possible if the detection task is reduced to that of reasoning about the truthfulness of a communication partner, as long as one has access to some external knowledge that can be used 
@@ -1198,67 +1524,81 @@ to evaluate
 the partner's statements.
 
 To demonstrate this, we consider a simplified\ MITM attack scenario along the lines of Stuxnet's MITM component. For simplicity of presentation, we do not include in the scenario occurrences of actions, but it is not difficult to see that our approach extends in a natural way when actions occur.  %are present
-\end{figwindow}
 
 
-Consider the case of a motor, $M$, that can be \emph{on} or \emph{off.} A sensor mounted on the motor tells whether the motor is overheating (fluent $overheat$). A controller, $C$, is programmed to turn off the motor if it is found to be overheating.
+Consider the case of a motor, $M$, that can be \emph{on} or \emph{off.} A sensor mounted on the motor tells whether the motor is overheating. A controller, $C$, is programmed to turn off the motor if it is found to be overheating.
 
-Suppose now that the system is the target of a MITM attack. An attacker, $A$, manages to place itself between $C$ and $M$, intercepting the communications between them. $A$ intercepts the output of $M$'s sensor, discarding the sensor reading and always providing $C$ with a reading of $\neg overheat$ independently of the actual state of $M$, i.e, %. In doing so, 
+Suppose now that the system is the target of a MITM attack. An attacker, $A$, manages to place itself between $C$ and $M$, intercepting the communications between them. $A$ intercepts the output of $M$'s sensor, discarding the sensor reading and always providing $C$ with a negative reading independently of the actual state of $M$, i.e, %. In doing so, 
 the attacker could prevent $C$ from turning off an overheating motor, eventually causing it to be %come 
 damaged. How can such an attack be detected?
 
-The solution leverages a technique for reasoning about cyber-physical systems and their interaction with the physical environment discussed in \cite{nb15}. Suppose that a thermostat, $T$ is  located near the motor,  which generates an acoustic alert every $20$ minutes if the temperature of the room is above $90^\circ$F, in order to ensure that the operators take more frequent breaks. World knowledge furthermore tells us that, during a cold season, it is unlikely for the temperature in the room to be above $90^\circ$F.
+The solution leverages a technique for reasoning about cyber-physical systems and their interaction with the physical environment discussed in \cite{nb15}. Suppose that a thermostat, $T$ is  located near the motor,  which generates an audible alert every $20$ minutes if the temperature of the room is above $90^\circ$F, in order to ensure that the operators take more frequent breaks. Based on world knowledge, during cold weather an observer will normally believe the temperature in the room to be below $90^\circ$F.
+ 
 
 The thermostat is not related to the functioning of the motor and, thus, it is conceivable that $A$ will not attempt to alter its activities.
 However, given the proximity of the motor, an alert from the thermostat when the room is not hot can be taken as an indication that $M$ is indeed overheating (and that $M$'s sensor reading may have been tampered with). Let us see how one can draw this conclusion using our framework.
 
-The relevant information can be formalized as follows:  %using the following statements:
+The relevant information can be formalized as shown below. The signature is defined so that $alert$ and $winter$ are fluents, while all others are beliefs. %using the following statements:
+\iffalse
 {
 \[
 \begin{array}{l}
 default(d_1^m, hot\_room, [alert]). \\
-default(d_2^m, \neg hot\_room, [cold\_season]). \\
+default(d_2^m, \neg hot\_room, [cold\_weather]). \\
 prefer(d_2^m,d_1^m, [ \: ]).\\
-rule(r_1^m,cold\_season,[winter]). \\
+rule(r_1^m,cold\_weather,[winter]). \\
 default(d_3^m,overheat,[alert, \neg hot\_room]).
 \end{array}
 \]
 }
-Default $d_1^m$, says that, normally, an alert from $T$ indicates that the room is hot. Default $d_2^m$, states that, normally, the room is not hot during a cold season. The third statement expresses a preference for $d_2^m$ when both $d_1^m$ and $d_2^m$ are applicable. This captures the intuition that, during the cold season,  one will have a tendency to assume that the room is not hot even if an alert is heard. Rule $r_1^m$ encodes the world knowledge that winter is a cold season. Finally, the last statement says that, typically, if an alert is generated by $T$ when the room is not hot, then $M$ is overheating. The statement is encoded as a default to increase elaboration tolerance, making it possible, for example, to take into account faults in the thermostat or the presence of other heat sources.
+\fi
+%
+\begin{lstlisting}[language=clingo,caption=Relevant Information, label=lst:pi_M, mathescape=true,xleftmargin=.01\textwidth, breaklines=true]
+default($d_1^m$, hot_room, [alert]). 
+default($d_2^m$, $\neg$hot_room, [cold_weather]). 
+prefer($d_2^m$,$d_1^m$, [ ]). 
+rule($r_1^m$,cold_weather,[winter]). 
+default($d_3^m$,overheat,[alert, $\neg$hot_room]).
+\end{lstlisting}
 
-Let us now suppose that we would like to evaluate the truthfulness of $M$'s sensor reading, and suppose that the sensor reports $\neg overheat$. The corresponding statement is:
+
+
+Default $d_1^m$ says that, as a rule, an observer hearing an alert from $T$ will believe the room to be hot. Default $d_2^m$ states that the observer will not believe the room to be hot during cold weather. The third statement expresses a preference for $d_2^m$ when both $d_1^m$ and $d_2^m$ are applicable. This captures the intuition that, during cold weather,  one will have a tendency to assume that the room is not hot even if an alert is heard. Rule $r_1^m$ states that, during the winter, one will believe the weather to be cold\footnote{We encode this statement in a non-defeasible way for the purpose of illustrating the $rule$ construct. In a more realistic scenario, one may want to use a default instead.}. The final statement says that, typically, if an alert is generated by $T$ when the room is not hot, then the observer will believe that $M$ is overheating. The statement is encoded as a default to increase elaboration tolerance, making it possible, for example, to take into account faults in the thermostat or the presence of other heat sources.
+
+Let us now suppose that we would like to evaluate the truthfulness of $M$'s sensor reading, and suppose that the sensor reports that there is no overheating. The corresponding statement is:
 $stm(\neg overheat,0).$
 Next, an alert is generated by $T$:
 $
 obs(alert,1).
 $
-Let $KB_m$ be the corresponding knowledge base. Clearly, default $d_2^m$ is not applicable and $d_1^m$ leads us to conclude that the temperature in the room is above $90^\circ$F. Thus, the reasoner has no reason to doubt the sensor reading:
+Let $KB_m$ be the corresponding knowledge base. Clearly, default $d_2^m$ is not applicable. Default $d_1^m$ leads the reasoner to conclude $believes(hot\_room,1)$, that is, that the temperature in the room is above $90^\circ$F. Thus, the reasoner has no reason to doubt the sensor reading:
 $
 KB_{m} \models {+}stm(\neg overheat,0)@1.
 $
 
-Next, the system is informed that it is winter. The updated knowledge base, $KB_m'$, extends $KB_m$ by the statement:
+Next, the system is informed that it is winter. The updated knowledge base, $KB_m'$, extends $KB_m$ by the statement
 $
 obs(winter,2).
 $
-We have %Our framework now yields:
+It is not difficult to check that the answer set of $\Pi(KB_m')$ contains $believes(cold\_weather,2)$ because of the application of rule $r^m_1$. Both defaults $d^m_1$ and $d^m_2$ are now applicable, but because of the preference over them, only the latter is applied, yielding the conclusion $believes(\neg hot\_room,2)$. Our framework now derives:
 $
 KB_m' \models {-}stm(\neg overheat,0)@2.
 $
 That is, the sensor reading from $M$ is deemed not truthful, which indicates that the system may be under a MITM attack.
 
+\iffalse
 \textcolor{red}{[REMOVE]} Finally, one can also reason about supporters and denials of $\neg overheat$. Given $KB_m$ and the above fluents, for example, it is not difficult to show that   $\emptyset$ is the minimal supporter  of $\neg overheat$ and $\{ winter \}$ is its minimal denial.
- 
+\fi 
    
 \section{Related Work }
 
 %\memo{expand -- in addition with trust modeling, lp with preferences, default logic with preferences, cr-prolog} 
 
-Within the scope of the ASP and logic programming community, this work is, to the best of our knowledge,  novel. As we have mentioned earlier, there is an extensive literature---within and outside the ASP community---for reasoning about actions and change, reasoning about defaults, and diagnostic reasoning about observations. All of these works are somewhat related to the proposed system. However, they are separate formalisms/systems that can be used as components of our system. In this sense, our work is related to    \cite{BalducciniG03b,BalducciniG03} and the ones mentioned earlier, such as \cite{brew99,BrewkaE00,DelgrandeST03,GelfondS98} as they are using ASP  in the implementation of a certain formalism. Also of note is that the proposed framework bears  similarity  to frameworks developed to
+Within the scope of the ASP and logic programming community, this work is, to the best of our knowledge,  novel. As we have mentioned earlier, there is an extensive literature---within and outside the ASP community---for reasoning about actions and change, reasoning about defaults, and diagnostic reasoning about observations. Besides action languages used in this paper, event calculus (e.g., \cite{KowalskiS86,den92a}) or situation calculus (e.g., \cite{McCarthyH69,Reiter01}) are formalisms for reasoning about actions and change and could be used instead of action languages; and, these formalisms have also been used in diagnosis (e.g., \cite{AriasCCG19,mci-th}). All of these works are somewhat related to the proposed system. However, they are separate formalisms/systems that can be used as components of our system. In this sense, our work is related to    \cite{BalducciniG03b,BalducciniG03} and the ones mentioned earlier, such as \cite{brew99,BrewkaE00,DelgrandeST03,GelfondS98} as they are using ASP  in the implementation of a certain formalism. Also of note is that the proposed framework bears  similarity  to frameworks developed to
 support \emph{diagnosis} as both rely on observations to draw conclusions but our framework 
 does not focus on explaining what goes wrong and does not assume completeness of the 
 knowledge of the agent (e.g., in the form of a complete
-model).
+model).   
 
 Formalisms like ASP with preferences (e.g., \cite{Brewka05,BrewkaDRS15})  can provide a foundation for the implementation of the proposed framework---e.g., by 
 facilitating the preferences between defaults.
@@ -1268,6 +1608,24 @@ facilitating the preferences between defaults.
 The AI community has explored the issue of computational trust and reputation in several works---please see \cite{SabaterS05} for a survey. The survey focuses predominantly on trust models observed in multi-agent scenarios, taking explicitly into account the observations concerning interactions among agents. The survey provides classification of the models according to different dimensions: conceptual model (cognitive vs. game theoretical), information sources (direct interactions, direct observations, witness information, sociological information, prejudice), visibility (subjective vs. global), granularity (context dependent vs. non-context dependent), model type (trust vs. reputation), type of information exchanged (boolean vs. continuous), and agent behavior's assumptions (honest, biased but not lying, lying). Within such classification, our model focuses on trust---but could easily accommodate other interesting forms of reputation)---based on cognitive aspects, it builds on direct observations, but can accommodate sociological biases and prejudice through defaults, it captures subjective visibility, it is context dependent and relies on boolean information.
  
 The survey in~\cite{ArtzG07} places a greater emphasis on surveying models of trust as models to predict attitude towards future interactions with an agent---with less emphasis on assessing the trustworthiness of a current statement.  
+
+Finally, this paper substantially expands and improves upon our prior work \cite{spg16,spg16b}. Specifically, in this paper:
+%\begin{itemize}
+%\item
+we develop a clearer characterization of the reasoning task of interest and of the role played by the agents involved;
+%\item
+we provide a more precise treatment of, and distinction between, fluents and beliefs;
+%\item
+we develop a characterization of the evolution of beliefs as a stand-alone, central reasoning task;
+%\item
+we redefine the task of reasoning about the truthfulness of statements;
+%\item
+we develop a more rigorous abstract framework, including a clear description of the various forms of entailment involved and of their roles;
+%\item
+we include proofs of the main claims; and
+%\item
+we include new and expanded applications and use cases to highlight the new findings.
+%\end{itemize}
 
 %\memo{need to work on -- to the conclusion 
 %}
@@ -1286,26 +1644,27 @@ explicitly contradicted.
 \begin{definition}
 Let $KB = \langle O, RD\rangle$ be a knowledge base and let us consider a statement 
 $stm(l,s)$. We say that:
-\begin{list}{$\bullet$}{\topsep=0pt \parsep=0pt \itemsep=0pt \leftmargin=10pt}
+\begin{itemize}
+
 \item $KB \models {+}stm(l,s)@t$ if for every answer set $A$ of $KB$ we have that
         $h(\bar{l},t)\not\in A$;
 \item $KB \models {-}stm(l,s)@t$ if every answer set $A$ of $KB$ contains
         $h(\bar{l},t)$;
 \item the statement is otherwise unknown.
-\end{list}
+\end{itemize} 
 \end{definition}
 This definition, applied to Example~\ref{ex2}, allows us to conclude:
   $KB_1 \models {+}stm(poor,0)@0$;
  $KB_1 \models   {-}stm(poor,0)@1$; and
  $KB_1 \models {+}stm(poor,0)@2$.
 %
-%\begin{list}{$\bullet$}{\topsep=1pt \parsep=0pt \itemsep=1pt}
+%\begin{itemize} 
 %\item $KB_1 \models {+}stm(poor,0)@0$;
 %
 %\item $KB_1 \models   {-}stm(poor,0)@1$; and
 %
 %\item $KB_1 \models {+}stm(poor,0)@2$. 
-%\end{list} 
+%\end{itemize}  
    
 \memo{
 talk about time annotated knowledge bases, 
@@ -1333,8 +1692,8 @@ Given a time-annotated knowledge base $KB$, the program $\Pi(KB)$ defined in the
 \begin{array}{l}
 h(H, S+T) \leftarrow  s(S),  
         rule(D, H^T, M),  \\ 
-     \hspace{.1cm} N = \# count \{L^T : mem(M, L^T)\},  \\ 
-    \hspace{.1cm}  \# count \{L^T : mem(M, L^T),  h(L, T{+}S) \} {==} N. 
+     \hspace{.1cm} N = \# count \{L^T : mbr(M, L^T)\},  \\ 
+    \hspace{.1cm}  \# count \{L^T : mbr(M, L^T),  h(L, T{+}S) \} {==} N. 
       \end{array}
 \end{equation} 
 
@@ -1434,7 +1793,7 @@ as it currently deals with time stamped literals already. The second extension m
 
 
 
-\bibliographystyle{acmtrans}
-\bibliography{enrico,bibfile,bib2010}
+\bibliographystyle{named}
+\bibliography{enrico,bibfile,bib2010,bib-mbal}
 
 \end{document} 
