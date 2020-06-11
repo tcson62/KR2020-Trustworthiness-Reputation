@@ -1,46 +1,46 @@
-%Filename: kr.sty
+%Filename: kr.sty -- version 1.2 (27-Feb-2020)
 %
-\typeout{Conference Style for KR for LaTeX 2e -- January 2020}
+\typeout{Conference Style for KR for LaTeX 2e -- version 1.2 (27-Feb-2020)}
 % WARNING: IF YOU ARE USING THIS STYLE SHEET FOR A KR PUBLICATION, YOU
-% MAY NOT MODIFY IT FOR ANY REASON. MODIFICATIONS (IN YOUR SOURCE 
+% MAY NOT MODIFY IT FOR ANY REASON. MODIFICATIONS (IN YOUR SOURCE
 % OR IN THIS STYLE SHEET WILL RESULT IN REJECTION OF YOUR PAPER).
 
-% NOTICE: This file is based on the AAAI formatting instructions as they 
+% NOTICE: This file is based on the AAAI formatting instructions as they
 % were in December 2013. It includes modifications for KR introduced in Jan 2020.
 % This file was originally prepared by Peter F. Patel-Schneider, liberally
 % using the ideas of other style hackers, including Barbara Beeton. It was
 % modified in April 1999 by J. Scott Penberthy and George Ferguson. It was
-% modified in 2007 by AAAI. It was modified in February 2009  
+% modified in 2007 by AAAI. It was modified in February 2009
 % and in November 2009 by Hans W. Guesgen and Giuseppe De Giacomo. It
-% was further modified in March 2010 by AAAI and adapted for KR in Jan 2020 by 
+% was further modified in March 2010 by AAAI and adapted for KR in Jan 2020 by
 % confDNA.
-% The original preparation of this file was supported by 
-% Schlumberger Palo Alto Research, AT\&T Bell Laboratories, AAAI, and 
+% The original preparation of this file was supported by
+% Schlumberger Palo Alto Research, AT\&T Bell Laboratories, AAAI, and
 % Morgan Kaufmann Publishers.
-% 
+%
 % WARNING: This style is NOT guaranteed to work. It is provided in the
 % hope that it might make the preparation of papers easier, but this style
 % file is provided "as is" without warranty of any kind, either express or
 % implied, including but not limited to the implied warranties of
 % merchantability, fitness for a particular purpose, or noninfringement.
 % You use this style file at your own risk. Standard disclaimers apply.
-% 
+%
 % Do not use this file unless you are an experienced LaTeX user. Please ensure
 % that your version of dvips maps to type 1 fonts. Place this document in
 % a file called kr.sty in the TeX search path. (Placing it in the same
 % directory as the paper should also work.)
 %
 % You must also format your paper for US letter-sized paper.
-% 
+%
 % There are undoubtably bugs in this style. If you would like to submit
-% bug fixes, improvements, etc. please let us know. 
-% 
+% bug fixes, improvements, etc. please let us know.
+%
 % USE OF PDFTeX IS NOW REQUIRED
 
 % PHYSICAL PAGE LAYOUT
 \setlength\topmargin{-0.25in} \setlength\oddsidemargin{-0.25in}
 \setlength\textheight{9.0in} \setlength\textwidth{7.0in}
-\setlength\columnsep{0.375in} 
+\setlength\columnsep{0.375in}
 \setlength\headheight{0pt}  \setlength\headsep{0pt}
 %\setlength\footheight{0pt}  \setlength\footskip{0pt}
 \thispagestyle{empty} \pagestyle{empty}
@@ -77,7 +77,7 @@
  \setcounter{footnote}{0}
  \let\maketitle\relax \let\@maketitle\relax
  \gdef\@thanks{}\gdef\@author{}\gdef\@title{}\let\thanks\relax}%
- 
+
  \def\@maketitle{%
  \newsavebox{\titlearea}
  \sbox{\titlearea}{
@@ -106,12 +106,12 @@
  \newlength\actualheight
  \settoheight{\actualheight}{\usebox{\titlearea}}
 
- 
+
  \ifdim\actualheight>\titlebox
      \setlength{\titlebox}{\actualheight}
  \fi
  %\setlength{\titlepad}{\dimexpr\titlepad+\titlepad\relax}
- 
+
  \setcounter{footnote}{0}
  \vbox to \titlebox {
      \def\thanks##1{\footnotemark}\relax
@@ -160,7 +160,7 @@ Abstract}\vspace{0.5ex}\begin{quote}\small}{\par\end{quote}\vskip 1ex}
 %% 2pt minus 1pt}{-1em}{\normalsize\bf}}
 -2pt minus -1pt}{-1em}{\normalsize\bf}}
 %%% END changed
-\setcounter{secnumdepth}{0}
+\setcounter{secnumdepth}{2}
 % add period to section (but not subsection) numbers, reduce space after
 %\renewcommand{\thesection}
 %   {\arabic{section}.\hskip-0.6em}
@@ -188,7 +188,7 @@ Abstract}\vspace{0.5ex}\begin{quote}\small}{\par\end{quote}\vskip 1ex}
 \itemsep \parsep}
 \def\@listiii{\leftmargin\leftmarginiii
 \labelwidth\leftmarginiii\advance\labelwidth-\labelsep
-\topsep 1pt plus 0.5pt minus 0.5pt 
+\topsep 1pt plus 0.5pt minus 0.5pt
 \parsep \z@ \partopsep 0.5pt plus 0pt minus 0.5pt
 \itemsep \topsep}
 \def\@listiv{\leftmargin\leftmarginiv
@@ -199,7 +199,7 @@ Abstract}\vspace{0.5ex}\begin{quote}\small}{\par\end{quote}\vskip 1ex}
 \labelwidth\leftmarginvi\advance\labelwidth-\labelsep}
 \abovedisplayskip 7pt plus2pt minus5pt%
 \belowdisplayskip \abovedisplayskip
-\abovedisplayshortskip 0pt plus3pt% 
+\abovedisplayshortskip 0pt plus3pt%
 \belowdisplayshortskip 4pt plus3pt minus3pt%
 % Less leading in most fonts (due to the narrow columns)
 % The choices were between 1-pt and 1.5-pt leading
@@ -247,7 +247,7 @@ Abstract}\vspace{0.5ex}\begin{quote}\small}{\par\end{quote}\vskip 1ex}
 \def\@cite##1##2{{##1\if@tempswa , ##2\fi}}%
 \@ifnextchar [{\@tempswatrue\@citex}{\@tempswafalse\@citex[]}}
 % don't box citations, separate with ; and a space
-% also, make the penalty between citations a parameter, 
+% also, make the penalty between citations a parameter,
 % it may be a good place to break
 \def\@citex[#1]#2{%
 \def\@lastauthor{}\def\@citea{}%
@@ -258,7 +258,7 @@ Abstract}\vspace{0.5ex}\begin{quote}\small}{\par\end{quote}\vskip 1ex}
 {Citation `\@citeb' on page \thepage \space undefined}}%
 {\csname b@\@citeb\endcsname}\let\@lastauthor\@thisauthor}}{#1}}
 %Ignore the key when generating the Reference section.
-\def\@lbibitem[#1]#2{\item\if@filesw 
+\def\@lbibitem[#1]#2{\item\if@filesw
 { \def\protect##1{\string ##1\space}\immediate
 \write\@auxout{\string\bibcite{#2}{#1}}}\fi\ignorespaces}
 \def\@biblabel#1{}

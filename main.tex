@@ -147,6 +147,8 @@
  
 
 
+%Marcello Balduccini, Michael Gelfond, Enrico Pontelli, Tran Cao Son: An Answer Set Programming Framework for Reasoning about Agents' Beliefs and Truthfulness of Statements
+
 
 % Title and Author Information Must Immediately Follow
 % the pdfinfo within the preamble
@@ -444,7 +446,7 @@ The set of observations $O_w\subseteq H^n$ in Example~\ref{ex1} includes the obs
     \item `John attends an expensive college' at time point $t_1$, and 
     \item `John receives a need-based scholarship' at time point $t_2$.
 \end{itemize}
- In this particular example we do not have any  action occurrences, i.e., $O_a = \emptyset$.\footnote{Some frameworks for reasoning about actions and change may require the introduction of a NOP action for modeling the example.} Our default theory $Def$ consists of defaults $d_1$ and $d_2$ stated earlier, which allow us to make conclusions regarding our agent's beliefs. 
+ In this particular example we do not have any  action occurrences.\footnote{Some frameworks for reasoning about actions and change may require the introduction of a NOP action for modeling the example.} Our default theory $Def$ consists of defaults $d_1$ and $d_2$ stated earlier, which allow us to draw conclusions regarding our agent's beliefs. 
 
 \iffalse
 %TEMP
@@ -453,7 +455,7 @@ The set of observations $O_w\subseteq H^n$ in Example~\ref{ex1} includes the obs
         {Answering Question: $(H^n,Act,Def) \models p[t]$?\label{fig:schema} }]
 \end{figwindow}
 \fi
-Let us consider a theory $T = (H^n, Act, \textit{Def})$ and the associated $\Phi_{Act}$ and $\models_D$. First, we are interested in defining the beliefs held by the agent over time. And, then, we are interested in using this information for answering the question of whether a statement $b[t]$,  made at time step $t$, where $b \in B$, can be accepted as truthful. For this, we define the entailment relation $\models$ between $T$ and $b[t]$. Intuitively, the process entails the steps below: %(Figure~\ref{fig:schema}):
+Let us consider a theory $T = (H^n, Act, \textit{Def})$ and the associated $\Phi_{Act}$ and $\models_D$. First, we are interested in defining the beliefs held by the agent over time. And, then, we are interested in using this information for answering the question of whether a statement $b[t]$,  where $b \in B$ and $t$ is the time step at which the statement was made, can be accepted as truthful. For this, we define the entailment relation $\models$ between $T$ and $b[t]$. Intuitively, the process entails the steps below: %(Figure~\ref{fig:schema}):
 
 \begin{itemize}
 \item Compute  $\hat\Phi_{Act}(H^n,\Sigma_0)$, the set of states that are reachable from the initial state given the history $H^n$,
@@ -643,7 +645,7 @@ Let us start with a simpler case---where we do not worry about action
 occurrences. We represents the components of the theory by means of keywords 
 $stm$ (for $statement$), $obs$ (for $observed$), $rule$, $default$, and $prefer$. 
 Fluent literals are defined as usual. Similarly, symbols for beliefs yield the notion of belief literal. By literals we mean fluent literals or belief literals. $\overline{l}$ 
-denotes the complement of literal $l$. Agents can make statement about literals.  
+denotes the complement of literal $l$. Agents can make statements about belief literals.  
 Statements are given in the form {$stm(b,s)$}
 where  $s$ is a non-negative integer (representing a time step) and $b$ is a belief literal.  
 For example, the statement `John said that he is poor'  can be stated as 
@@ -741,8 +743,8 @@ Intuitively, $r$ and $d$ are used to name rules and defaults.
 %
 %We will next define the notion of consistent knowledge bases. 
 We say that a set of observations $O$ is \emph{consistent} if, for each time step $s$ and fluent literal $l$, $\{obs(l,s), obs(\neg l, s)\} \not\subseteq O$. 
-Following the conventional assumption in the literature, we will make the following assumptions about the preference relation in $RD$: 
-\emph{acyclic preference}: we assume that the preference relation between defaults represents a transitive and irreflexive relation, i.e., there exists no sequence of preference statements $prefer(d_i, d_{i+1}, body_i)$, $i=1,\ldots,k$, in $RD$ such that $\bigcup_{i=1}^k body_i$  is consistent. 
+Following the conventional approach from the literature, we make the assumptions that the preference relation in $RD$ is an 
+\emph{acyclic preference} and  that it is a transitive and irreflexive relation, i.e., there exists no sequence of preference statements $prefer(d_i, d_{i+1}, body_i)$, $i=1,\ldots,k$, in $RD$ such that $d_1 = d_{k+1}$ and $\bigcup_{i=1}^k body_i$  is consistent. 
 
 \iffalse 
 I added 
@@ -761,7 +763,7 @@ is consistent.
 A $KB = \langle O, RD \rangle$ is \emph{consistent} if $O$ and $RD$ is consistent. 
 \end{definition} 
 %
-Our goal is to identify the agent's beliefs and to use them to determine whether  a statement $stm(p, s)$ is true at a time step $t$ given $KB$. We will develop a program $\Pi(KB)$ to answer this question. We assume a finite horizon of steps, denoted by $s(0), \ldots, s(k)$. We use $h(L,S)$ to encode that fluent literal $L$ is true at step $S$. We use $believes(B,S)$ to represent that the agent believes $B$ at step $S$. Furthermore, to simplify the use of $\Pi(KB)$ with current ASP solvers, we  encode a rule of the form \eqref{rule}  using {\bf (a)} the ASP atom $rule(r, head, name)$ and
+Our goal is to identify the agent's beliefs and to use them to determine whether  a statement $stm(p, s)$ is true at a time step $t$ given $KB$. We will develop a program $\Pi(KB)$ to answer this question. We assume a finite horizon of steps, denoted by $s(0), \ldots, s(k)$. We use $h(L,S)$ to encode that fluent literal $L$ is true at step $S$. We use $believes(B,S)$ to state that the agent believes $B$ at step $S$. Furthermore, to simplify the use of $\Pi(KB)$ with current ASP solvers, we  encode a rule of the form \eqref{rule}  using {\bf (a)} the ASP atom $rule(r, head, name)$ and
 {\bf (b)} the set of ASP atoms $\{mbr(l, name) \mid l \in body_{r}\}$, where \(name\) is a unique identifier for the rule; similar encodings are used for  \eqref{default} and \eqref{pref}. 
 This method of encoding is similar to what is used  in answer set planning and allows for the separation between  the encoding of the problem and the rules for reasoning with it.
 The main challenge to be addressed lies in the interaction between observations and defaults. 
@@ -810,12 +812,12 @@ These rules encode the principle {\bf (O)}. Rule \eqref{lp:obs1} states that $nr
 \begin{equation}\label{lp:rule}
 \begin{array}{ll}
 believes(H, S) \leftarrow & s(S),  rule(D, H, M),  \\
-        & N  = \# count \{L : mbr(L, M)\},\\
+        & N  == \# count \{L : mbr(L, M)\},\\
         & \# count \{L : mbr(L, M),\\
-        &\hspace*{.8in}h(L, T) \}= N_h,  \\ 
+        &\hspace*{.8in}h(L, T) \}== N_h,  \\ 
         & \# count \{L : mbr(L, M),\\
-        &\hspace*{.44in}believes(L, T) \}= N_b, \\
-        & N_h+N_b=N.  \\ 
+        &\hspace*{.44in}believes(L, T) \}== N_b, \\
+        & N_h+N_b==N.  \\ 
 %
 %& N = \# count \{L : mbr(L, M),  h(L, S) \},\\ 
 %     & N  = \# count \{L : mbr(L, M)\}.
@@ -823,7 +825,7 @@ believes(H, S) \leftarrow & s(S),  rule(D, H, M),  \\
 \end{equation} 
 
 %
-Intuitively, (\ref{lp:rule}) states that, if the body of a $rule$ statement is satisfied, then its head must be true. Recall that, according to the syntax given earlier, the head is a belief -- hence the expression $believes(H,S)$ in (\ref{lp:rule}). Checking whether the body is satisfied is compactly achieved by leveraging the $\#count$ aggregate of the ASP Core 2 language\footnote{Details can be found in \cite{ASPCore2Standard}}, which calculates the cardinality of a set. For instance, the expression $\# count \{L : mbr(L, M), h(L, T) \}$ finds number of literals that are in the body of the rule ($mbr(L,M)$) and hold at time step $T$ ($h(L,T)$). The combination of aggregates present in (\ref{lp:rule}) checks that the number of literals that hold or are believed equals the size of the body of the rule.\footnote{Recall that fluent symbols and belief symbols are disjoint. }
+Intuitively, (\ref{lp:rule}) states that, if the body of a $rule$ statement is satisfied, then its head must be true. Recall that, according to the syntax given earlier, the head is a belief -- hence the expression $believes(H,S)$ in (\ref{lp:rule}). The `$==$' symbol denotes identity at the level of ground terms.\footnote{The variables involved are replaced by a constant during the grounding process and the identity is checked during the solving phase.} Checking whether the body is satisfied is compactly achieved by leveraging the $\#count$ aggregate of the ASP Core 2 language\footnote{Details can be found in \cite{ASPCore2Standard}}, which calculates the cardinality of a set. For instance, the expression $\# count \{L : mbr(L, M), h(L, T) \}$ finds number of literals that are in the body of the rule ($mbr(L,M)$) and hold at time step $T$ ($h(L,T)$). The combination of aggregates present in (\ref{lp:rule}) checks that the number of literals that hold or are believed equals the size of the body of the rule.\footnote{Recall that fluent symbols and belief symbols are disjoint. }
 
  For reasoning about defaults  of the form \eqref{default} we have:
 % 
@@ -831,11 +833,11 @@ Intuitively, (\ref{lp:rule}) states that, if the body of a $rule$ statement is s
 %{\small
 \begin{eqnarray}
 app(D, H, S) & \leftarrow  &  s(S), default(D, H, M), \nonumber \\
-        & & N  = \# count \{L : mbr(L, M)\},    \nonumber\\
+        & & N  == \# count \{L : mbr(L, M)\},    \nonumber\\
         & & \# count \{L : mbr(L, M),  \nonumber\\
-        & & \hspace*{.8in}h(L, T) \}= N_h,  \nonumber\\ 
+        & & \hspace*{.8in}h(L, T) \}== N_h,  \nonumber\\ 
         & & \# count \{L : mbr(L, M), \nonumber\\
-        & & N_h+N_b=N. \label{lp:app} \\ 
+        & & N_h+N_b==N. \label{lp:app} \\ 
 %     & & NC  = \# count \{L : mbr(L, M)\}, \nonumber \\ 
 %    & & \# count \{L : mbr(L, M),     h(L, T) \} == NC. \nonumber \\ 
 ab(D, H, S)& \leftarrow &   s(S), app(D, H, S), \nonumber\\
@@ -909,13 +911,13 @@ Finally, the last rule  enforces the application of any default that is applicab
 \begin{equation}\label{lp:pref}
 \begin{array}{ll}
 prefer(D_1, D_2, S) \leftarrow &  s(S),   prefer(D_1, D_2, M),   \\
-     & N  = \# count \{L : \\
+     & N  = =\# count \{L : \\
      &  \hspace*{.3in} mbr(L, M)\},  \\ 
      & \# count \{L : mbr(L, M),  \\
-     &  \hspace*{.3in}  h(L, S) \} {=} N_h, \\
+     &  \hspace*{.3in}  h(L, S) \} {=} =N_h, \\
      & \# count \{L : mbr(L, M), \\
-     & \hspace*{.3in} believes(L, S) \} {=} N_b, \\
-     & N_h+N_b=N.
+     & \hspace*{.3in} believes(L, S) \} {=} =N_b, \\
+     & N_h+N_b==N.
       \end{array}
 \end{equation} 
 }
@@ -993,7 +995,7 @@ literal $l$ and time step $t$.
 %
 \noindent
 {\bf Proof.}
-The proof of this proposition relies on the fact that $believes(l, t)$ is in an answer set $A$ if the logic program  rule \eqref{lp:rule} (or \eqref{lp:holds}) is satisfied by $A$. If a rule \eqref{lp:rule} is satisfied by $A$ then a $KB$ contains a rule $rule(r,l,body)$ and $body$ is satisfied by $A$. Because of the consistency of $KB$, we know that there exists no rule $rule(r', \overline{l}, body')$ such that $body'$ is satisfied by $A$. For otherwise, $KB$ is inconsistent. This will imply that for every default $default(d, \overline{l}, body')$, if the default is applicable then the body of the rule \eqref{lp:defeat0} is satisfied and therefore $defeated(d)$ belongs to $A$. Consequently, the rule \eqref{lp:holds} is not satisfied for the default $d$, and hence, $believes(\overline{l}, t)$ cannot belong to $A$.
+The proof of this proposition relies on the fact that $believes(l, t)$ is in an answer set $A$ if the logic program  rule \eqref{lp:rule} (or \eqref{lp:holds}) is satisfied by $A$. If a rule \eqref{lp:rule} is satisfied by $A$ then a $KB$ contains a rule $rule(r,l,body)$ and $body$ is satisfied by $A$. Because of the consistency of $KB$, we know that there exists no rule $rule(r', \overline{l}, body')$ such that $body'$ is satisfied by $A$. For, otherwise, $KB$ is inconsistent. This will imply that for every default $default(d, \overline{l}, body')$, if the default is applicable, then the body of the rule \eqref{lp:defeat0} is satisfied and therefore $defeated(d)$ belongs to $A$. Consequently, \eqref{lp:holds} is not satisfied for the default $d$, and hence, $believes(\overline{l}, t)$ cannot belong to $A$.
 
 Similar argument can be used to argue for the case that two defaults, one supporting $l$ and another supporting $\overline{l}$, given that $KB$ is consistent can never be applied at the same time to create both $believes({l}, t)$ and $believes(\overline{l}, t)$ in an answer set.
 \hfill\qedsymbol{}
@@ -1139,8 +1141,8 @@ $\Pi_Q \cup \{\leftarrow \naf \mathtt{x}(b,t)\}$   has an answer set then   $\Pi
 % 
 \noindent
 {\bf Proof.}
-Observe that $\Pi_Q \cup \{\leftarrow \mathtt{x}(b,t).\}$ does not have an answer set 
-implies that $\Pi_Q$ either has no answer set or every answer set of $\Pi_Q$
+Observe that if $\Pi_Q \cup \{\leftarrow \mathtt{x}(b,t).\}$ does not have an answer set, this
+implies that  either $\Pi_Q$ has no answer set or every answer set of $\Pi_Q$
 contains $\mathtt{x}(b,t)$. The second condition implies that $\Pi_Q$ has at least one answer set. 
 This implies that  $\Pi_Q \models \mathtt{x}(b, t)$.  
 \hfill\qedsymbol{}
@@ -1204,8 +1206,8 @@ We add to $\Pi(KB)$ the following rules:
 obs(P, S)  & \leftarrow & s(S), occ(A, S), exec(A, M), \label{lp:exec} \\
 & & mbr(P, M).  \nonumber    \\ 
 obs(L, S+1) & \leftarrow & s(S),     occ(A, S), causes(A, L, M),\\
-& &  N  = \# count \{X : mbr(X, M)\},  \label{lp:effect} \nonumber\\
-& & \# count \{X : mbr(X, M),  h(X, T) \} = N  \nonumber
+& &  N  = =\# count \{X : mbr(X, M)\},  \label{lp:effect} \nonumber\\
+& & \# count \{X : mbr(X, M),  h(X, T) \} == N  \nonumber
 \end{eqnarray} 
 
 Rule \eqref{lp:exec} indicates that the observation of an action occurrence allows us to infer that its executability conditions must be satisfied---we capture this by generating new observations about the time step in which the action has occurred.
@@ -1432,15 +1434,15 @@ We can show the following
 
 \section{Applications} 
 
-As a potential application for our framework, consider the following scenario. Bob is walking in a good area of the city when, suddenly, a person appears, brandishing a knife and displaying a menacing demeanor. At some point during the confrontation, Bob shoots and kills the person. A court needs to decide whether Bob acted in self-defense or not. Simplifying somewhat, we will assume that the only relevant law says that one acted in self-defense if they believed to be in imminent danger.
+As a potential application of our framework, consider the following scenario. Bob is walking in a good area of the city when a person suddenly appears, brandishing a knife and displaying a menacing demeanor. At some point during the confrontation, Bob shoots and kills the person. A court needs to decide whether Bob acted in self-defense or not. Simplifying the scenario, we will assume that the only relevant law says that one acted in self-defense if they believed to be in imminent danger.
 
-To make the example more meaningful, suppose the police found that the knife the person was holding was fake. Thus, we can identify two possible scenarios:
+To make the example more interesting, suppose the police found that the knife the person was holding was fake. Thus, we can identify two possible scenarios:
 
     1. When Bob shot the person, he had not yet noticed that the knife was fake. We could expect to conclude that at that time Bob believed to be in imminent danger.
 
     2. If instead Bob shot the person after observing that the knife was fake, we could expect to conclude that, at the time of the shooting, Bob did not believe to be in imminent danger.
 
-Assume that the police is able to tell when Bob shot the person and when he observed that the knife was fake, for example thanks to a reliable witness who saw the events from Bob's same perspective\footnote{In an actual case, other considerations may play a role, e.g. the reliability of the witness or whether the perspective was really the same. These complications are outside the scope of our example.}. We will demonstrate the use of our framework to reason about the evolution of Bob's beliefs and determine if he acted in self-defense.
+Assume that the police are able to tell when Bob shot the person and when he observed that the knife was fake, for example thanks to a reliable witness who saw the events from Bob's same perspective\footnote{In an actual case, other considerations may play a role, e.g. the reliability of the witness or whether the perspective was really the same. These complications are outside the scope of our example.}. We will demonstrate the use of our framework to reason about the evolution of Bob's beliefs and determine if he acted in self-defense.
 
 A possible formalization of the knowledge base from this example is the following set $RD^s$ of statements:
 
@@ -1448,14 +1450,14 @@ A possible formalization of the knowledge base from this example is the followin
 causes(appears(X),is(X,present),[]).
 default($d^s_1$,inImminentDanger,[has(att,k),
   is(att,present),is(att,menc)])
-default($d^s_2$,-inImminentDanger,[has(att,k),
+default($d^s_2$,$\neg$inImminentDanger,[has(att,k),
   is(att,present),is(att,menc),is(k,fake)])
 prefer($d^s_2$,$d^s_1$, [ ]).
-default($d^s_3$,-inImminentDanger,
+default($d^s_3$,$\neg$inImminentDanger,
   [at(a1), is(a1,good)])
 prefer($d^s_1$,$d^s_3$, [ ]).
 \end{lstlisting}
-The representation uses fluents $has(p,o)$ (p has/holds object o), $is(o,a)$ (object o has attribute a), and $at(l)$ (Bob is at location $l$). The objects are $k$ (the knife), $a1$ (the good area of the city), and $att$ (the attacker). Additionally, we use contants $present$ (for attribute ``physically present''), $fake$ (attribute of the knife), $menc$ (menacing-looking), and $good$ (attribute of the area of the city). The actions are $appears(p)$ (person $p$ appears) and $shoots(p)$ (Bob shoots $p$). The effect of the former is described by the $causes$ statement; the latter action has no effects within the scope of the example. The intuitive meaning of the defaults is:
+The representation uses fluents $has(p,o)$ (p has/holds object o), $is(o,a)$ (object o has attribute a), and $at(l)$ (Bob is at location $l$). The objects are $k$ (the knife), $a_1$ (the good area of the city), and $att$ (the attacker). Additionally, we attributes constants $present$ (for attribute ``physically present''), $fake$ (attribute of the knife), $menc$ (menacing-looking), and $good$ (attribute of the area of the city). The actions are $appears(p)$ (person $p$ appears) and $shoots(p)$ (Bob shoots $p$). The effect of the former is described by the $causes$ statement; the latter action has no effects within the scope of the example. The intuitive meaning of the defaults is:
 \begin{itemize}
 \item $d^s_1$: If there is someone who is menacing-looking and holding a knife, one will normally believe to be in imminent danger
 \item $d^s_2$: In the above case, if the knife is fake, one will not normally believe to be in imminent danger
@@ -1467,8 +1469,8 @@ The initial part of the story is captured by:
 \begin{array}{lll}
 O^s_{init}  =  \left\{
 \begin{array}{ll} 
-obs(at(a1),0).   %\ \ \ \ 
-& obs(is(a1,good),0). \\
+obs(at(a_1),0).   %\ \ \ \ 
+& obs(is(a_1,good),0). \\
 obs(\neg is(att,present),0). & 
 hpd(appears(att),0). \\    % the guy appears
 obs(is(att,menc),1). &  %\ \ \ \     % the guy is menacing-looking
@@ -1477,7 +1479,7 @@ obs(has(att,k),1).
 \right\}
 \end{array}
 \]
-Let us consider what our framework yields for $KB^s_{init}=\langle O^s_{init},RD^s \rangle$. One can check that the answer set of $\Pi(KB^s_{init})$ contains $h(at(a1),0)$ and $h(is(a1,good),0)$. The only applicable default is $d^s_3$, yielding $believes(\neg inImminentDanger,0)$, i.e. Bob does not believe to be in imminent danger at time step $0$. The two possible evolutions of the story are formalized as follows:
+Let us consider what our framework yields for $KB^s_{init}=\langle O^s_{init},RD^s \rangle$. One can check that the answer set of $\Pi(KB^s_{init})$ contains $h(at(a_1),0)$ and $h(is(a_1,good),0)$. The only applicable default is $d^s_3$, yielding $believes(\neg inImminentDanger,0)$, i.e. Bob does not believe to be in imminent danger at time step $0$. The two possible evolutions of the story are formalized as follows:
 \begin{itemize}
 \item Scenario 1: \[
 \begin{array}{lll}
@@ -1503,7 +1505,7 @@ hpd(shoots(bob,att),1).
 \multicolumn{3}{l}{KB^s_2=\langle O^S_{init} \cup O^s_2,RD^s \rangle}
 \end{array}
 \]
-At time step $1$, Bob has observed that the knife is fake and, thus, $h(is(k,fake),1)$ holds. Hence, all defaults are applicable.  Because $d^s_2$ is preferred to $d^s_1$, the answer set of $\Pi(KB^s_2)$ contains $believes(\neg inImminentDanger, 1)$. That is, Bob did not initially believe to be in imminent danger and did not believed so at the time of the shooting as well. 
+At time step $1$, Bob has observed that the knife is fake and, thus, $h(is(k,fake),1)$ holds. Hence, all defaults are applicable.  Because $d^s_2$ is preferred to $d^s_1$, the answer set of $\Pi(KB^s_2)$ contains $believes(\neg inImminentDanger, 1)$. That is, Bob did not initially believe to be in imminent danger and did not believe so at the time of the shooting either. 
 \end{itemize}
 
 % application.tex
@@ -1793,7 +1795,8 @@ as it currently deals with time stamped literals already. The second extension m
 
 
 
-\bibliographystyle{named}
+%\bibliographystyle{named}
+\bibliographystyle{kr}
 \bibliography{enrico,bibfile,bib2010,bib-mbal}
 
 \end{document} 
