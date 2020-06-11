@@ -1,0 +1,155 @@
+We thank all reviewers for their valuable comments and suggestions. We will eliminate all typos they have pointed out. 
+
+Reviewer 1: Thanks for the suggestion. We will definitely try it. 
+
+
+Reviewer 2: 
+Thanks for the pointing out the problems in Examples 2 & 3. Indeed, we decided to separate more crisply "h" and "believes" at the last minutes and these are mistakes.  
+
+Example 2: yes, the text should have been stated that "not every answer set contains believes(poor, 2) or believes(-poor,2)" -- which corresponds to the text in Example 1 as well. 
+
+As for the example 3, we realize that we have omitted a rule in the group (11)-(15) which states that a rule is defeated if the negation of the head is true in reality, i.e,  
+
+defeated(D, H, S)  :-   s(S), app(D, H, S),  neg(H,H_1), h(H_1, S).  
+
+Given rule (18), in conjunction with (8) will allow us to derive h(-poor,2) and this will defeat default d2.   
+
+Our bad with rule(r, head, name) - should be rule(r, head, body) 
+
+For the other suggestions, we will try to change the program to make it clearer. 
+
+
+Reviewer 3 
+We thank the reviewer for the pointers to the literature on trust and reputation or even belief change. We are aware of the work by Shapiro et al. (or other works related to iterated belief change/revision), none of this work deals with defaults.  We are also certain though that there is no work in ASP that addresses the questions as in a story as in Example 1. 
+
+Our MITM example is obviously a toy one, but MITM attacks are a real concern and, while encryption can mitigate them, unfortunately it is not the final solution. MITM attacks involving HTTPS are well known, for instance. Additionally, many control systems used nowadays in the critical infrastructure do not support encryption and there is no realistic expectation that they will support it in the foreseeable future, so alternative approaches are valuable
+
+Reviewer 1:
+
+The paper introduces a framework for reasoning about beliefs of agents in a sequence of time points. Agents can believe in something at a time point, and change their mind later because of new observations. A clarifying example is provided in the introduction and used later in the paper to demonstrate how the proposed approach can deal with typical situations that may occur when reasoning with partial observability. The framework is implemented in answer set programming, a logic-based formalism that can naturally handle nonmonotonic reasoning.
+
+The framework is well-motivated and clearly presented. Formal results are correct (to the best of my efforts) and also explained without technicisms, so that even non-experts can follow the text. An empirical evaluation is missing, but it should not be a main issue for the format of this paper. All in all, a nice reading and a good framework to present at the conference in my opinion.
+
+Minor notes follow.
+
+Before Example 3, rule (20) is referred, but it should be (19).
+
+While reading the paper, I was thinking if rules of the form
+
+believes(H,S) :- s(S), rule(D,H,M),
+N == #count{L : mbr(L,M)},
+#count{L : mbr(L,M), h(L,T)} == Nh,
+#count{L : mbr(L,M), believes(L,T)} == Nb,
+Nh + Nb == N.
+
+could be a problem for the grounding, which would be the case if N, Nh and Nb can have several values. I usually encode such cases with something like
+
+believes(H,S) :- s(S), rule(D,H,M),
+#sum{1,L : mbr(L,M);
+-1,L : mbr(L,M), h(L,T);
+-1,L : mbr(L,M), believes(L,T)} == 0. 
+
+On the other hand, in your case N == #count{L : mbr(L,M)} is not involved in any guess, and this should enforce that only one pair of the other two aggregates satisfies Nh + Nb == N. Plus, I think that N is usually very small. Anyhow, I wanted to share, just in case you want to check.
+
+Reviewer 2: 
+
+The paper presents an approach to reasoning about 
+agents beliefs and the truth of their statements in Answer Set Programming (ASP).
+The authors introduce an abstract framework for this reasoning task and instantiate it with ASP.
+Most of the paper is devoted to specifying the approach in ASP and 
+illustrating it by a motivating example and two simple applications.
+The approach consists of a methodology to specify the reasoning tasks
+in terms of rules, defaults, and preferences over defaults, and 
+a logic program that provides the semantics for such a specification.
+
+
+In my opinion, the problem tackled in the paper is interesting 
+from a knowledge representation (KR) perspective: 
+representing and reasoning about the statements of agents looks like a natural KR problem. 
+Furthemore, the problem has some practical importance, as argued in the introduction of the paper. 
+
+The use of ASP for this task is reasonable, 
+since it provides the means to represent both dynamic domains and defaults, 
+that seem to arise naturally in this kind of task.
+To my knowledge, this usage of ASP is novel.
+On the other hand, the specific solution in ASP builds on previous 
+work on reasoning about actions and defaults in ASP.
+
+I will continue commenting two technical errors of the paper, 
+that I think that should be fixable by the authors.
+
+The first one shows up in the Example 2 and is related to 
+the implementation of the skeptical principal in the rules (11-15).
+In Example 2, for k=2, it is said that none of the answer sets of the program
+contains believes(poor,2) or believes(-poor,2), but this is not true.
+That program has three stable models: one with believes(poor,2) (call it M1), 
+another with believes(-poor,2) (M2), and another one without any of them (M3).
+When two conflicting defaults are applicable and no preference applies to them, 
+the rules (11-15) generate these three possibilities. 
+In particular, the believes atoms of M1 and M2
+are generated by the negative cycle between rules 13 and 15. 
+For me it is not clear if the error occurs in the text of the Example 2
+or in the encoding (11-15). I tend to believe in the latter, since I see 
+no reason for generating those two additional answer sets, but perhaps I am missing something.
+
+The second error shows up in the Example 3. 
+Probably this example has to be reformulated.
+It is said that KB3 |= −stm(poor,0)@2 holds 
+(in the paper there is a typo, it says -stm(-poor,0)@2 but this does not represent
+that the statement of John being poor made at step 0 is false at step 2)
+but this is not true because the program has two stable models without believes(-poor,2).
+As said in the text, the default d2 is applicable, but it cannot be defeated
+because for that (using rule 13) we should have derived believes(-poor,2),
+but rule 18 only gives us obs(-poor,2) from which we cannot derive that atom
+(although we can derive h(-poor,2) using rule 8). 
+A related issue is that the body of the exec statement contains the belief literal -poor, 
+but in the previous paragraph it is said that only fluent literals can occur there.
+
+These errors bring me to the following problem with the presentation of the approach.
+The solution is illustrated through various examples, but there is no in depth discussion of it.
+This makes it hard to evaluate it and to say whether the proposal is a good solution for the task.
+I am aware that it may be hard to discuss more in depth this kind of KR contributions, and
+that the authors already provide some applications of the approach.
+But it would be helpful to study at least some properties, for example:
+when does a description has some answer set? or a unique answer set? 
+This also relates to the first error I mentioned above:
+since there is no further discussion of the logic program, it is not clear what should be correct, 
+the logic program or the description of the results of the example?
+
+In this direction, the paper would greatly benefit for a real world application 
+that could show more clearly the possibilities and limitations of the approach.
+
+Finally, the paper reads well (with some minors, see below) and related work is well commented.
+
+Page 2, right col., 3rd bullet: it is not clear to me what is a natural extension 
+4th bullet: scholarship s
+Def. 2: is consistent -> are consistent
+You use rule(r,head,name) but r and name seem to have the same purpose, 
+and r is not used in rule 10, perhaps you could delete one of them?
+In rules 10, 11 and 19: replace T by S
+Page 4, right col., nr(L,S_1) -> nr(L,S,U)
+finds number -> finds the number
+In rule 11 one line is missing
+Rules 10, 11 and 14 repeat part of its body, perhaps define a predicate
+holds_body(M) and reuse it in those rules?
+Move rule 12 after 14? It uses predicate defeated that is defined by 13 and 14
+Page 5, right col., start: Consequently, (15) -> the body of (15)
+bottom: l, t, and s -> b, t and s 
+Before Proposition 2, say what type of entailment are you considering, cautious or credulous
+Start of 3.3: to set -> to the set
+O^s_init: hpd -> occ
+
+Reviewer 3:
+
+The paper presents a framework for representing and reasoning about the beliefs and deciding on the truthfulness of the statements. The applicability is demonstrated with some use cases. Although this is a nicely written paper, what mainly lacks is the motivation behind using ASP and emphasis on what makes this work different and significant. 
+
+The related work section is quite weak and outdated, especially now that Trust in AI is getting more attention. Thus the significance of this work is not really clear, since no comparison is being made to works of similar context. It is clear that this is the first work to be done with ASP, but what does this work really add for the Trust in AI area? No other works are being mentioned that tackles this issue. A short literature search finds many different works and also workshops (e.g., TRUST@AAMAS). For example there is an argumentation-based work "Tang, Y., Cai, K., McBurney, P., Sklar, E., & Parsons, S. (2012). Using argumentation to reason about trust and belief. Journal of Logic and Computation, 22(5), 979-1018." that could be viewed as related. 
+
+Also while reading the paper the concept of "belief change" or "belief revision" comes to mind, but the authors do no mention any works on that either. For example, another short literature search shows the work "S. Shapiro, M. Pagnucco, Y. Lespérance, and H. J. Levesque. Iterated belief change in the situation calculus. Artificial Intelligence 175, no. 1 (2011): 165-192." which looks to be related as well.
+
+I would suggest the authors to make a thorough literature search to highlight more on what is missing in these works and what the proposed framework brings to the table, so that the paper becomes much stronger.
+
+
+More comments:
+- The MITM example is nice as a hypothetical example, but in real life such attacks could be mitigated by secure communications, e.g., RSA certificates, and the mentioned thermostat example could be overcome with good engineering. Even though I'm also for ASP being used more in industry, I can't really see this example to be a realistic application case.
+- The definition of believing truthfulness (Defn 3) makes sense from an ASP point-of-view, but it seems likely that we may mostly end up with "undecided" cases. Also I would assume that such a definition of believing a statement must have been considered before. It would be nice if relevant references are made.
