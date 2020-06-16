@@ -437,7 +437,7 @@ $\hat\Phi_{Act}(\sigma, [a; \beta]) = \bigcup_{\sigma' \in \Phi_{Act}(a, \sigma)
 %        denotes the natural extension of $\Phi_{Act}$ to sequence. %A resulting sequence $<\sigma_0,a_0,\sigma_1,a_1,\ldots,\sigma_k>$ is called a \emph{possible path}. 
         %Let us denote with $\models_A$ the entailment relation defined within the logical framework $A$ used to describe $Act$.    
 
-\item We have commonsense knowledge about how an agent of interest forms its beliefs (e.g., an agent may believe that a person attending an expensive school normally comes from a rich family, a person obtaining need-based scholarship  usually comes from a poor family).
+\item We have commonsense knowledge about how an agent of interest forms its beliefs (e.g., an agent may believe that a person attending an expensive school normally comes from a rich family, a person obtaining need-based scholarship s  usually comes from a poor family).
 This knowledge is represented by a default theory with preferences $\textit{Def}$,  that enables reasoning about the state of the agent's beliefs. Let us denote with $\models_D$ the entailment relation defined over the default theory framework defining $\textit{Def}$.  
  
 \end{itemize} 
@@ -766,7 +766,7 @@ A $KB = \langle O, RD \rangle$ is \emph{consistent} if $O$ and $RD$ are consiste
 \end{definition} 
 %
 Our goal is to identify the agent's beliefs and to use them to determine whether  a statement $stm(p, s)$ is true at a time step $t$ given $KB$. We will develop a program $\Pi(KB)$ to answer this question. We assume a finite horizon of steps, denoted by $s(0), \ldots, s(k)$. We use $h(L,S)$ to encode that fluent literal $L$ is true at step $S$. We use $believes(B,S)$ to state that the agent believes $B$ at step $S$. Furthermore, to simplify the use of $\Pi(KB)$ with current ASP solvers, we  encode a rule of the form \eqref{rule}  using {\bf (a)} the ASP atom $rule(r, head, name)$ and
-{\bf (b)} the set of ASP atoms $\{mbr(l, r) \mid l \in body_{r}\}$, where \textit{name} is the name for the rule and $mbr$ stands for `\textit{member\_of}'; similar encodings are used for  \eqref{default} and \eqref{pref}. 
+{\bf (b)} the set of ASP atoms $\{mbr(l, name) \mid l \in body_{r}\}$, where \(name\) is a unique identifier for the rule and $mbr$ stands for `member'; similar encodings are used for  \eqref{default} and \eqref{pref}. 
 This method of encoding is similar to what is used  in answer set planning and allows for the separation between  the encoding of the problem and the rules for reasoning with it.
 The main challenge to be addressed lies in the interaction between observations and defaults. 
 We apply the following principles:
@@ -798,16 +798,16 @@ The first set of rules is used to  reason about observations of the form
 \eqref{obs}:
 %
 \begin{eqnarray}  
-  nr(L, U, S)  & \leftarrow &  s(U), neg(L,L_1), obs(L_1, V), s(S), \nonumber  \\
-  &&U {<} V, V {<} S.   \label{lp:obs1} \\
-%obs(\overline{P}, S_2), s(S),  S_1 < S_2, S_2 < S. \nonumber
-h(L, S)  & \leftarrow &   obs(L,S_1), s(S),  S_1 \le S, \nonumber  \\ 
-&&\naf nr(L, S_1, S).    \label{lp:obs} 
+h(L, S)  & \leftarrow &   obs(L,S_1), s(S),  S_1 \le S, \label{lp:obs} \\
+&&\naf nr(L, S_1, S).    \nonumber\\
 %               \naf \:not\_most\_recent(P, S_1, S).  \nonumber \\
 % not\_most\_recent(P, S_1, S) \leftarrow s(S_1),  \label{lp:obs1}  \\ 
+  nr(L, U, S)  & \leftarrow &  s(U), neg(L,L_1), obs(L_1, V), s(S), \label{lp:obs1} \\
+  &&U {<} V, V {<} S.  \nonumber  %\\ 
+%obs(\overline{P}, S_2), s(S),  S_1 < S_2, S_2 < S. \nonumber
 \end{eqnarray} 
 
-These rules encode the principle {\bf (O)}. Rule \eqref{lp:obs1} states that $nr(L,U,S)$ is true if there exists a more recent observation of  $\neg L$. Rule \eqref{lp:obs} indicates that an observation stays true if every conflicting observation is `older'.
+These rules encode the principle {\bf (O)}. Rule \eqref{lp:obs1} states that $nr(L,S_1)$ is true if there exists a more recent observation of  $\neg L$. Rule \eqref{lp:obs} indicates that an observation stays true if every conflicting observation is `older'.
  
  For reasoning about statements of the form \eqref{rule}, we have\footnote{
  We would like to thank the anonymous reviewer for the suggestion on how to encode this rule for better performance.  
@@ -817,31 +817,23 @@ These rules encode the principle {\bf (O)}. Rule \eqref{lp:obs1} states that $nr
 %%-1,L : mbr(L,M), believes(L,T)} == 0. 
  }:  %
 %
-\begin{eqnarray}
-h\_body(M,S) & \leftarrow  &  s(S), \nonumber \\ 
-        & & N  = \# count \{L : mbr(L, M)\},    \nonumber\\
-        & & N_h= \# count \{L : mbr(L, M),  \nonumber\\
-        & & \hspace*{.8in}h(L, T) \},  \nonumber\\ 
-        & & N_b = \# count \{L : mbr(L, M), \nonumber\\
-        & &\hspace*{.44in}believes(L, T) \}, \nonumber \\
-        & & N_h+N_b==N. \label{lp:body} \\
-believes(H, S) & \leftarrow & s(S),  rule(_, H, M), \nonumber \\
-        && h\_body(M,S)   \label{lp:rule}
-%%        & N  = \# count \{L : mbr(L, M)\},\\
-%%        & N_h = \# count \{L : mbr(L, M),\\
-%%        &\hspace*{.8in}h(L, T) \},  \\ 
-%%        & N_b = \# count \{L : mbr(L, M),\\
-%%        &\hspace*{.44in}believes(L, T) \}, \\
-%%        & N_h+N_b==N.  \label{lp:believes}   
+\begin{equation}\label{lp:rule}
+\begin{array}{ll}
+believes(H, S) \leftarrow & s(S),  rule(D, H, M),  \\
+        & N  == \# count \{L : mbr(L, M)\},\\
+        & \# count \{L : mbr(L, M),\\
+        &\hspace*{.8in}h(L, T) \}== N_h,  \\ 
+        & \# count \{L : mbr(L, M),\\
+        &\hspace*{.44in}believes(L, T) \}== N_b, \\
+        & N_h+N_b==N.  \\ 
 %
 %& N = \# count \{L : mbr(L, M),  h(L, S) \},\\ 
 %     & N  = \# count \{L : mbr(L, M)\}.
-\end{eqnarray} 
+      \end{array}
+\end{equation} 
+
 %
-\eqref{lp:body} defines an auxiliary predicate \textit{h\_body} where for each set $M$ of literals and time step $S$, 
-$h\_body(M,S)$ is true when all literals in $M$ are true or believed at $S$. 
-The `$==$' symbol denotes identity at the level of ground terms.\footnote{The variables involved are replaced by a constant during the grounding process and the identity is checked during the solving phase.} Checking whether the body is satisfied is compactly achieved by leveraging the $\#count$ aggregate of the ASP Core 2 language\footnote{Details can be found in \cite{ASPCore2Standard}}, which calculates the cardinality of a set. For instance, the expression $\# count \{L : mbr(L, M), h(L, T) \}$ finds the number of literals that are in the body of the rule ($mbr(L,M)$) and hold at time step $T$ ($h(L,T)$). The combination of aggregates present in (\ref{lp:rule}) checks that the number of literals that hold or are believed equals the size of the body of the rule.\footnote{Recall that fluent symbols and belief symbols are disjoint. }
-Intuitively, (\ref{lp:rule}) states that, if the body of a $rule$ statement is satisfied, then its head must be true. Recall that, according to the syntax given earlier, the head is a belief -- hence the expression $believes(H,S)$ in (\ref{lp:rule}). 
+Intuitively, (\ref{lp:rule}) states that, if the body of a $rule$ statement is satisfied, then its head must be true. Recall that, according to the syntax given earlier, the head is a belief -- hence the expression $believes(H,S)$ in (\ref{lp:rule}). The `$==$' symbol denotes identity at the level of ground terms.\footnote{The variables involved are replaced by a constant during the grounding process and the identity is checked during the solving phase.} Checking whether the body is satisfied is compactly achieved by leveraging the $\#count$ aggregate of the ASP Core 2 language\footnote{Details can be found in \cite{ASPCore2Standard}}, which calculates the cardinality of a set. For instance, the expression $\# count \{L : mbr(L, M), h(L, T) \}$ finds number of literals that are in the body of the rule ($mbr(L,M)$) and hold at time step $T$ ($h(L,T)$). The combination of aggregates present in (\ref{lp:rule}) checks that the number of literals that hold or are believed equals the size of the body of the rule.\footnote{Recall that fluent symbols and belief symbols are disjoint. }
 
  For reasoning about defaults  of the form \eqref{default} we have:
 % 
@@ -849,9 +841,16 @@ Intuitively, (\ref{lp:rule}) states that, if the body of a $rule$ statement is s
 %{\small
 \begin{eqnarray}
 app(D, H, S) & \leftarrow  &  s(S), default(D, H, M), \nonumber \\
-&& h\_body(M,S)  \label{lp:app} \\ 
+        & & N  == \# count \{L : mbr(L, M)\},    \nonumber\\
+        & & \# count \{L : mbr(L, M),  \nonumber\\
+        & & \hspace*{.8in}h(L, T) \}== N_h,  \nonumber\\ 
+        & & \# count \{L : mbr(L, M), \nonumber\\
+        & & N_h+N_b==N. \label{lp:app} \\ 
 %     & & NC  = \# count \{L : mbr(L, M)\}, \nonumber \\ 
-%    & & \# count \{L : mbr(L, M),     h(L, T) \} == NC. \nonumber  \\
+%    & & \# count \{L : mbr(L, M),     h(L, T) \} == NC. \nonumber \\ 
+ab(D, H, S)& \leftarrow &   s(S), app(D, H, S), \nonumber\\
+    & &  neg(H, H_1), app(D_1, H_1, S),  \nonumber \\
+    &&   \naf defeated(D_1, H_1, S).  \label{lp:ab}      \\
 defeated(D, H, S) & \leftarrow  & s(S), app(D, H, S), \nonumber\\
         & &  neg(H,H_1), \nonumber \\
         & &  h(H_1, S).  \:\:\:  \label{lp:defeat01} \\ 
@@ -861,10 +860,7 @@ defeated(D, H, S) & \leftarrow  & s(S), app(D, H, S), \nonumber\\
 defeated(D, H, S) & \leftarrow  & s(S),  app(D, H, S),    \nonumber \\ 
         & &  neg(H,H_1), \nonumber \\ %
         & & app(D_1, H_1, S), \nonumber\\
-        & & prefer(D_1, D, S).   \label{lp:defeat}\\ 
-ab(D, H, S)& \leftarrow &   s(S), app(D, H, S), \nonumber\\
-    & &  neg(H, H_1), app(D_1, H_1, S),  \nonumber \\
-    &&   \naf defeated(D_1, H_1, S).  \label{lp:ab}     \\
+        & & prefer(D_1, D, S).   \label{lp:defeat}\\
 believes(H, S) & \leftarrow & app(D, H, S), \nonumber \\
         & & \naf ab(D, H, S), \nonumber\\
         & & \naf defeated(D, H, S).  \label{lp:holds}
@@ -918,7 +914,7 @@ The rule for {\it app} defines when a default is \emph{applicable}, i.e., when i
 The rule for {\it ab} enforces the principle {\bf (SK)}. It states that a default $d$ should be blocked if there is another default with the conflicting conclusion ($h'$ in $neg(h, h')$), which is not defeated.
 Finally, the last rule  enforces the application of any default that is applicable and not otherwise blocked.
  
- %\setcounter{equation}{13}
+ \setcounter{equation}{13}
  
  For reasoning about preferences of the form \eqref{pref}, we employ the rules:
 % 
@@ -926,14 +922,13 @@ Finally, the last rule  enforces the application of any default that is applicab
 \begin{equation}\label{lp:pref}
 \begin{array}{ll}
 prefer(D_1, D_2, S) \leftarrow &  s(S),   prefer(D_1, D_2, M),   \\
-     & h\_body(M, S). 
-%     & N  =\# count \{L : \\
-%     &  \hspace*{.3in} mbr(L, M)\},  \\ 
-%     & N_h = \# count \{L : mbr(L, M),  \\
-%     &  \hspace*{.3in}  h(L, S) \} , \\
-%     & N_n = \# count \{L : mbr(L, M), \\
-%     & \hspace*{.3in} believes(L, S) \} , \\
-%     & N_h+N_b==N.
+     & N  = =\# count \{L : \\
+     &  \hspace*{.3in} mbr(L, M)\},  \\ 
+     & \# count \{L : mbr(L, M),  \\
+     &  \hspace*{.3in}  h(L, S) \} {=} =N_h, \\
+     & \# count \{L : mbr(L, M), \\
+     & \hspace*{.3in} believes(L, S) \} {=} =N_b, \\
+     & N_h+N_b==N.
       \end{array}
 \end{equation} 
 }
@@ -1011,7 +1006,7 @@ literal $l$ and time step $t$.
 %
 \noindent
 {\bf Proof.}
-The proof of this proposition relies on the fact that $believes(l, t)$ is in an answer set $A$ if the logic program  rule \eqref{lp:rule} (or \eqref{lp:holds}) is satisfied by $A$. If a rule \eqref{lp:rule} is satisfied by $A$ then a $KB$ contains a rule $rule(r,l,body)$ and $body$ is satisfied by $A$. Because of the consistency of $KB$, we know that there exists no rule $rule(r', \overline{l}, body')$ such that $body'$ is satisfied by $A$. For, otherwise, $KB$ is inconsistent. This will imply that for every default $default(d, \overline{l}, body')$, if the default is applicable, then the body of the rule \eqref{lp:defeat0} is satisfied and therefore $defeated(d)$ belongs to $A$. Consequently, the body of \eqref{lp:holds} is not satisfied for the default $d$, and hence, $believes(\overline{l}, t)$ cannot belong to $A$.
+The proof of this proposition relies on the fact that $believes(l, t)$ is in an answer set $A$ if the logic program  rule \eqref{lp:rule} (or \eqref{lp:holds}) is satisfied by $A$. If a rule \eqref{lp:rule} is satisfied by $A$ then a $KB$ contains a rule $rule(r,l,body)$ and $body$ is satisfied by $A$. Because of the consistency of $KB$, we know that there exists no rule $rule(r', \overline{l}, body')$ such that $body'$ is satisfied by $A$. For, otherwise, $KB$ is inconsistent. This will imply that for every default $default(d, \overline{l}, body')$, if the default is applicable, then the body of the rule \eqref{lp:defeat0} is satisfied and therefore $defeated(d)$ belongs to $A$. Consequently, \eqref{lp:holds} is not satisfied for the default $d$, and hence, $believes(\overline{l}, t)$ cannot belong to $A$.
 
 Similar argument can be used to argue for the case that two defaults, one supporting $l$ and another supporting $\overline{l}$, given that $KB$ is consistent can never be applied at the same time to create both $believes({l}, t)$ and $believes(\overline{l}, t)$ in an answer set.
 \hfill\qedsymbol{}
@@ -1126,7 +1121,7 @@ if $KB \not\models +stm(b,s)@t$ and $KB \not\models -stm(b,s)@t$.
 \end{itemize}  
 \end{definition} 
 
-Intuitively, $KB  \models {+}stm(b,s)@t$ (resp. $KB  \models {-}stm(b,s)@t$) says that at the time step $t$, at the same time step or later than the time step that the statement about $b$ is made, the statement is believed to be true (resp. believed to be false). $KB \not\models {\pm}stm(b,s)@t$ states that there is no information that supports or denies the statement at the time step $t$. Observe that $b$, $t$, and $s$ are constants representing the question whether or not $stm(b,s)$ is believed to be true at step $t$. As such, requiring $believes(b,t)$ to be in every answer set of the program 
+Intuitively, $KB  \models {+}stm(b,s)@t$ (resp. $KB  \models {-}stm(b,s)@t$) says that at the time step $t$, at the same time step or later than the time step that the statement about $b$ is made, the statement is believed to be true (resp. believed to be false). $KB \not\models {\pm}stm(b,s)@t$ states that there is no information that supports or denies the statement at the time step $t$. Observe that $l$, $t$, and $s$ are constants representing the question whether or not $stm(b,s)$ is believed to be true at step $t$. As such, requiring $believes(b,t)$ to be in every answer set of the program 
 does not mean that $believes(b,t)$ belongs to every answer set for every $t$ such that $s \le t \le k$. 
 Observe that this entailment can be computed in ASP by the following rules: 
 %
@@ -1145,7 +1140,7 @@ Observe that this entailment can be computed in ASP by the following rules:
 Let $\Pi_Q = \Pi(KB) \cup \{\eqref{q1}{-}\eqref{q3}\}$. It can be shown that 
  $KB  \models {+}stm(b,s)@t$, $KB  \models {-}stm(b,s)@t$, and  $KB  \models {\pm}stm(b,s)@t$ 
  correspond to $\Pi_Q \models \mathtt{t}(b,t)$, $\Pi_Q \models \mathtt{f}(b,t)$, and 
- $\Pi_Q \models \mathtt{u}(b,t)$, respectively. Hence, we can compute skeptical entailment for the truthfulness of a statement 
+ $\Pi_Q \models \mathtt{u}(b,t)$, respectively. Hence, we can compute the truthfulness of a statement 
 using two calls to an ASP-solver. 
  
  %For example, if the program $$\Pi_Q \cup \{\leftarrow \naf \mathtt{f}(l,t), \naf \mathtt{u}(l,t).\}$$ does not have an answer set and the program $$\Pi_Q \cup \{\leftarrow \naf \mathtt{t}(l,t)\}$$ has an answer set then we can conclude that $\Pi_Q \models \mathtt{t}((l, t)$. 
@@ -1201,7 +1196,7 @@ $KB_2 \not\models {\pm}stm(poor,0)@0$;
  
 \subsection{Reasoning With Observations about Action Occurrences} 
 
-In this section, we shift our focus to the set $A$ of actions from the action signature $\langle F, B, A \rangle$. Following common practice in action languages \cite{GelfondL98}, we assume that each action is  associated with a set of literals, called its \emph{effects}, with each effect potentially predicated on a different set of literals, called \emph{preconditions}. A third set of literals, the \emph{executability conditions}, states when the action can be executed vs impossible. This information is encoded in statements of the form: 
+In this section, we shift our focus to set $A$ of actions from the action signature $\langle F, B, A \rangle$. Following common practice in action languages \cite{GelfondL98}, we assume that each action is  associated with a set of literals, called its \emph{effects}, with each effect potentially predicated on a different set of literals, called \emph{preconditions}. A third set of literals, the \emph{executability conditions}, states when the action can be executed vs impossible. This information is encoded in statements of the form: 
 $exec(a,body)$ and $causes(a,p,body)$ 
 %\begin{align}
 % exec(a,body) \label{exec} \\
@@ -1220,12 +1215,11 @@ We add to $\Pi(KB)$ the following rules:
  %and can be encoded   as follows. 
 %
 \begin{eqnarray}
-obs(P, S)  & \leftarrow & s(S), occ(A, S), exec(A, M), \nonumber    \\
-& & mbr(P, M).  \label{lp:exec} \\  
-obs(L, S+1) & \leftarrow & s(S),     occ(A, S), causes(A, L, M), \nonumber    \\
-& &  N   =\# count \{X : mbr(X, M)\},   \nonumber\\
-& & \# count \{X : mbr(X, M),  \nonumber \\ 
-&& \hspace*{.4in} h(X, T) \} == N.  \label{lp:effect} 
+obs(P, S)  & \leftarrow & s(S), occ(A, S), exec(A, M), \label{lp:exec} \\
+& & mbr(P, M).  \nonumber    \\ 
+obs(L, S+1) & \leftarrow & s(S),     occ(A, S), causes(A, L, M),\\
+& &  N  = =\# count \{X : mbr(X, M)\},  \label{lp:effect} \nonumber\\
+& & \# count \{X : mbr(X, M),  h(X, T) \} == N  \nonumber
 \end{eqnarray} 
 
 Rule \eqref{lp:exec} indicates that the observation of an action occurrence allows us to infer that its executability conditions must be satisfied---we capture this by generating new observations about the time step in which the action has occurred.
@@ -1490,7 +1484,7 @@ O^s_{init}  =  \left\{
 obs(at(a_1),0).   %\ \ \ \ 
 & obs(is(a_1,good),0). \\
 obs(\neg is(att,present),0). & 
-occ(appears(att),0). \\    % the guy appears
+hpd(appears(att),0). \\    % the guy appears
 obs(is(att,menc),1). &  %\ \ \ \     % the guy is menacing-looking
 obs(has(att,k),1).
 \end{array}
@@ -1503,7 +1497,7 @@ Let us consider what our framework yields for $KB^s_{init}=\langle O^s_{init},RD
 \begin{array}{lll}
 O^s_{1} & = & \left\{
 \begin{array}{l} 
-occ(shoots(bob,att),1). 
+hpd(shoots(bob,att),1). 
 \end{array}
 \right\}\\
 \ \\
@@ -1516,7 +1510,7 @@ The time step of interest is $1$. Note that $h(is(att,menc),1)$ and $h(has(att,k
 O^s_{2} & = & \left\{
 \begin{array}{l} 
 obs(is(k,fake),1). \\   % the knife is fake
-occ(shoots(bob,att),1).
+hpd(shoots(bob,att),1).
 \end{array}
 \right\} \\
 \ \\
@@ -1711,7 +1705,7 @@ Given a time-annotated knowledge base $KB$, the program $\Pi(KB)$ defined in the
   \begin{equation}\label{lp:rule:tt}
 \begin{array}{l}
 h(H, S+T) \leftarrow  s(S),  
-        rule(_, H^T, M),  \\ 
+        rule(D, H^T, M),  \\ 
      \hspace{.1cm} N = \# count \{L^T : mbr(M, L^T)\},  \\ 
     \hspace{.1cm}  \# count \{L^T : mbr(M, L^T),  h(L, T{+}S) \} {==} N. 
       \end{array}

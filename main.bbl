@@ -1,0 +1,185 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Arias \bgroup et al\mbox.\egroup
+  }{2019}]{AriasCCG19}
+Arias, J.; Carro, M.; Chen, Z.; and Gupta, G.
+\newblock 2019.
+\newblock {Modeling and Reasoning in Event Calculus Using Goal-Directed
+  Constraint Answer Set Programming}.
+\newblock In {\em LOPSTR, 2019}.
+
+\bibitem[\protect\citeauthoryear{Artz and Gil}{2007}]{ArtzG07}
+Artz, D., and Gil, Y.
+\newblock 2007.
+\newblock {A Survey of Trust in Computer Science and the Semantic Web}.
+\newblock {\em Journal of Web Semantics} 5:58--71.
+
+\bibitem[\protect\citeauthoryear{{ASP~Standardization~Working~Group}}{2013}]{ASPCore2Standard}
+{ASP~Standardization~Working~Group}.
+\newblock 2013.
+\newblock {ASP}-{C}ore-2 input language format, version 2.01c.
+\newblock Available at
+  https://www.mat.unical.it/aspcomp2013/ASPStandardization.
+
+\bibitem[\protect\citeauthoryear{Balduccini and Gelfond}{2003a}]{BalducciniG03}
+Balduccini, M., and Gelfond, M.
+\newblock 2003a.
+\newblock {Diagnostic Reasoning with A-Prolog}.
+\newblock {\em Theory and Practice of Logic Programming} 3(4,5):425--461.
+
+\bibitem[\protect\citeauthoryear{Balduccini and
+  Gelfond}{2003b}]{BalducciniG03b}
+Balduccini, M., and Gelfond, M.
+\newblock 2003b.
+\newblock {Logic Programs with Consistency-Restoring Rules}.
+\newblock In {\em International Symposium on Logical Formalization of
+  Commonsense Reasoning}, AAAI Spring Symposium Series,  9--18.
+
+\bibitem[\protect\citeauthoryear{Brewka and Eiter}{1999}]{brew99}
+Brewka, G., and Eiter, T.
+\newblock 1999.
+\newblock Preferred answer sets for extended logic programs.
+\newblock {\em Artificial Intelligence} 109:297--356.
+
+\bibitem[\protect\citeauthoryear{Brewka and Eiter}{2000}]{BrewkaE00}
+Brewka, G., and Eiter, T.
+\newblock 2000.
+\newblock Prioritizing default logic.
+\newblock In {\em { Intellectics and Computational Logic}}, volume~19 of {\em
+  {Applied Logic Series}}. Kluwer.
+\newblock  27--45.
+
+\bibitem[\protect\citeauthoryear{Brewka \bgroup et al\mbox.\egroup
+  }{2015}]{BrewkaDRS15}
+Brewka, G.; Delgrande, J.; Romero, J.; and Schaub, T.
+\newblock 2015.
+\newblock asprin: Customizing answer set preferences without a headache.
+\newblock In {\em Proceedings of the Twenty-Ninth {AAAI} Conference on
+  Artificial Intelligence, January 25 - 30, 2015, Austin, Texas, USA}.
+
+\bibitem[\protect\citeauthoryear{Brewka}{2005}]{Brewka05}
+Brewka, G.
+\newblock 2005.
+\newblock Preferences in answer set programming.
+\newblock In {\em Current Topics in Artificial Intelligence, 11th Conference of
+  the Spanish Association for Artificial Intelligence, {CAEPIA} 2005, Santiago
+  de Compostela, Spain, November 16-18, 2005, Revised Selected Papers},  1--10.
+
+\bibitem[\protect\citeauthoryear{Delgrande, Schaub, and
+  Tompits}{2003}]{DelgrandeST03}
+Delgrande, J.; Schaub, T.; and Tompits, H.
+\newblock 2003.
+\newblock A framework for compiling preferences in logic programs.
+\newblock {\em Theory and Practice of Logic Programming} 3(2):129--187.
+
+\bibitem[\protect\citeauthoryear{Denecker, Missiaen, and
+  Bruynooghe}{1992}]{den92a}
+Denecker, M.; Missiaen, L.; and Bruynooghe, M.
+\newblock 1992.
+\newblock Temporal reasoning with abductive event calculus.
+\newblock In {\em Proceedings~of ECAI92}.
+
+\bibitem[\protect\citeauthoryear{Gelfond and Lifschitz}{1991}]{GelfondL91}
+Gelfond, M., and Lifschitz, V.
+\newblock 1991.
+\newblock Classical negation in logic programs and disjunctive databases.
+\newblock {\em New Generation Computing}  365--387.
+
+\bibitem[\protect\citeauthoryear{Gelfond and Lifschitz}{1998}]{GelfondL98}
+Gelfond, M., and Lifschitz, V.
+\newblock 1998.
+\newblock {Action Languages}.
+\newblock {\em Electronic Transactions on Artificial Intelligence} 3(6).
+
+\bibitem[\protect\citeauthoryear{Gelfond and Son}{1998}]{GelfondS98}
+Gelfond, M., and Son, T.~C.
+\newblock 1998.
+\newblock Prioritized default theory.
+\newblock In {\em Selected Papers from the Workshop on Logic Programming and
+  Knowledge Representation 1997},  164--223.
+\newblock Springer Verlag, LNAI 1471.
+
+\bibitem[\protect\citeauthoryear{Kowalski and Sergot}{1986}]{KowalskiS86}
+Kowalski, R., and Sergot, M.
+\newblock 1986.
+\newblock A logic-based calculus of events.
+\newblock {\em New Generation Computing} 4:67--95.
+
+\bibitem[\protect\citeauthoryear{Marek and Truszczy\'nski}{1999}]{MarekT99}
+Marek, V., and Truszczy\'nski, M.
+\newblock 1999.
+\newblock Stable models and an alternative logic programming paradigm.
+\newblock In {\em The Logic Programming Paradigm: a 25-year Perspective},
+  375--398.
+
+\bibitem[\protect\citeauthoryear{McCarthy and Hayes}{1969}]{McCarthyH69}
+McCarthy, J., and Hayes, P.
+\newblock 1969.
+\newblock Some philosophical problems from the standpoint of artificial
+  intelligence.
+\newblock In Meltzer, B., and Michie, D., eds., {\em Machine Intelligence},
+  volume~4. Edinburgh: Edinburgh University Press.
+\newblock  463--502.
+
+\bibitem[\protect\citeauthoryear{McIllraith}{1997}]{mci-th}
+McIllraith, S.
+\newblock 1997.
+\newblock {\em Towards a formal account of diagnostic problem solving}.
+\newblock Ph.D. Dissertation, Toronto.
+
+\bibitem[\protect\citeauthoryear{Minnich \bgroup et al\mbox.\egroup
+  }{2015}]{MinnichCMLF15}
+Minnich, A.~J.; Chavoshi, N.; Mueen, A.; Luan, S.; and Faloutsos, M.
+\newblock 2015.
+\newblock Trueview: Harnessing the power of multiple review sites.
+\newblock In Gangemi, A.; Leonardi, S.; and Panconesi, A., eds., {\em
+  Proceedings of the 24th International Conference on World Wide Web, {WWW}
+  2015, Florence, Italy, May 18-22, 2015},  787--797.
+\newblock {ACM}.
+
+\bibitem[\protect\citeauthoryear{Nedelcu and Balduccini}{2015}]{nb15}
+Nedelcu, A., and Balduccini, M.
+\newblock 2015.
+\newblock {A}n {A}pproach and {T}ool for {R}easoning about {S}ituated
+  {C}yber-{P}hysical {S}ystems.
+\newblock In {\em The First Workshop on Action Languages, Process Modeling, and
+  Policy Reasoning (ALPP 2015)}.
+
+\bibitem[\protect\citeauthoryear{Reiter}{2001}]{Reiter01}
+Reiter, R.
+\newblock 2001.
+\newblock {\em {KNOWLEDGE IN ACTION}: Logical Foundations for Specifying and
+  Implementing Dynamical Systems}.
+\newblock The MIT Press.
+
+\bibitem[\protect\citeauthoryear{Rowe}{2006}]{elie}
+Rowe, N.
+\newblock 2006.
+\newblock {Deception in Electronic Goods and Services}.
+\newblock In {\em Encyclopedia of E-Commerce, E-Government, and Mobile
+  Commerce}. The Idea Group.
+
+\bibitem[\protect\citeauthoryear{Sabater and Sierra}{2005}]{SabaterS05}
+Sabater, J., and Sierra, C.
+\newblock 2005.
+\newblock {Review on Computational Trust and Reputation Models}.
+\newblock {\em Artificial Intelligence Review} 24:33--60.
+
+\bibitem[\protect\citeauthoryear{Son \bgroup et al\mbox.\egroup
+  }{2016a}]{spg16b}
+Son, T.~C.; Pontelli, E.; Gelfond, M.; and Balduccini, M.
+\newblock 2016a.
+\newblock {A}n {A}nswer {S}et {P}rogramming {F}ramework for {R}easoning about
+  {T}ruthfulness of {S}tatements by {A}gents.
+\newblock In {\em 32nd International Conference on Logic Programming (ICLP16)}.
+
+\bibitem[\protect\citeauthoryear{Son \bgroup et al\mbox.\egroup
+  }{2016b}]{spg16}
+Son, T.~C.; Pontelli, E.; Gelfond, M.; and Balduccini, M.
+\newblock 2016b.
+\newblock {R}easoning about {T}ruthfulness of {A}gents {U}sing {A}nswer {S}et
+  {P}rogramming.
+\newblock In {\em 15th International Conference on Principles of Knowledge
+  Representation and Reasoning}.
+
+\end{thebibliography}
