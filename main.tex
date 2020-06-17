@@ -825,7 +825,7 @@ h\_body(M,S) & \leftarrow  &  s(S), \nonumber \\
         & & N_b = \# count \{L : mbr(L, M), \nonumber\\
         & &\hspace*{.44in}believes(L, T) \}, \nonumber \\
         & & N_h+N_b==N. \label{lp:body} \\
-believes(H, S) & \leftarrow & s(S),  rule(_, H, M), \nonumber \\
+believes(H, S) & \leftarrow & s(S),  rule(R_, H, M), \nonumber \\
         && h\_body(M,S)   \label{lp:rule}
 %%        & N  = \# count \{L : mbr(L, M)\},\\
 %%        & N_h = \# count \{L : mbr(L, M),\\
