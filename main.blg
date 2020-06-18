@@ -12,16 +12,16 @@ Repeated entry---line 8711 of file bibfile.bib
 I'm skipping whatever remains of this entry
 Database file #3: bib2010.bib
 Database file #4: bib-mbal.bib
-Repeated entry---line 5027 of file bib-mbal.bib
+Repeated entry---line 5059 of file bib-mbal.bib
  :  nb15
  :      ,
 I'm skipping whatever remains of this entry
 
 Here's how much of BibTeX's memory you used:
- Cites:                25 out of 7500
- Fields:              564 out of 125000
- Hash table:        34786 out of 35000
- Strings:             748 out of 30000
- String pool:        9028 out of 750000
+ Cites:                28 out of 7500
+ Fields:              587 out of 125000
+ Hash table:        34781 out of 35000
+ Strings:             765 out of 30000
+ String pool:        9656 out of 750000
  Wizard functions:   2568 out of 10000
 (There were 2 error messages)

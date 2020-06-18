@@ -80,6 +80,13 @@ Denecker, M.; Missiaen, L.; and Bruynooghe, M.
 \newblock Temporal reasoning with abductive event calculus.
 \newblock In {\em Proceedings~of ECAI92}.
 
+\bibitem[\protect\citeauthoryear{Drawel, Bentahar, and Qu}{2020}]{dbq20}
+Drawel, N.; Bentahar, J.; and Qu, H.
+\newblock 2020.
+\newblock {C}omputationally {G}rounded {Q}uantitative {T}rust with {T}ime.
+\newblock In {\em Proceedings of the 19th International Conference on
+  Autonomous Agents and MultiAgent Systems (AAMAS 2020)},  1837--1839.
+
 \bibitem[\protect\citeauthoryear{Gelfond and Lifschitz}{1991}]{GelfondL91}
 Gelfond, M., and Lifschitz, V.
 \newblock 1991.
@@ -146,6 +153,14 @@ Nedelcu, A., and Balduccini, M.
 \newblock In {\em The First Workshop on Action Languages, Process Modeling, and
   Policy Reasoning (ALPP 2015)}.
 
+\bibitem[\protect\citeauthoryear{Player and Griffiths}{2019}]{pg19}
+Player, C., and Griffiths, N.
+\newblock 2019.
+\newblock {A}ddressing {C}lass {I}mbalance in {T}rust and {S}tereotype
+  {A}ssessment.
+\newblock In {\em Proceedings of the 21st International Workshop on Trust in
+  Agent Societies (TRUST 2019)}.
+
 \bibitem[\protect\citeauthoryear{Reiter}{2001}]{Reiter01}
 Reiter, R.
 \newblock 2001.
@@ -182,5 +197,12 @@ Son, T.~C.; Pontelli, E.; Gelfond, M.; and Balduccini, M.
 \newblock {A}n {A}nswer {S}et {P}rogramming {F}ramework for {R}easoning about
   {T}ruthfulness of {S}tatements by {A}gents.
 \newblock In {\em 32nd International Conference on Logic Programming (ICLP16)}.
+
+\bibitem[\protect\citeauthoryear{Tang \bgroup et al\mbox.\egroup
+  }{2012}]{tcm12}
+Tang, Y.; Cai, K.; McBurney, P.; Sklar, E.; and Parsons, S.
+\newblock 2012.
+\newblock {U}sing {A}rgumentation to {R}eason about {T}rust and {B}elief.
+\newblock {\em Journal of Logic and Computation} 22(5):979--1018.
 
 \end{thebibliography}
