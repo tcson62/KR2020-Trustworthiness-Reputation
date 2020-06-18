@@ -765,8 +765,8 @@ is consistent.
 A $KB = \langle O, RD \rangle$ is \emph{consistent} if $O$ and $RD$ are consistent. 
 \end{definition} 
 %
-Our goal is to identify the agent's beliefs and to use them to determine whether  a statement $stm(p, s)$ is true at a time step $t$ given $KB$. We will develop a program $\Pi(KB)$ to answer this question. We assume a finite horizon of steps, denoted by $s(0), \ldots, s(k)$. We use $h(L,S)$ to encode that fluent literal $L$ is true at step $S$. We use $believes(B,S)$ to state that the agent believes $B$ at step $S$. Furthermore, to simplify the use of $\Pi(KB)$ with current ASP solvers, we  encode a rule of the form \eqref{rule}  using {\bf (a)} the ASP atom $rule(r, head, name)$ and
-{\bf (b)} the set of ASP atoms $\{mbr(l, r) \mid l \in body_{r}\}$, where \textit{name} is the name for the rule and $mbr$ stands for `\textit{member\_of}'; similar encodings are used for  \eqref{default} and \eqref{pref}. 
+Our goal is to identify the agent's beliefs and to use them to determine whether  a statement $stm(p, s)$ is true at a time step $t$ given $KB$. We will develop a program $\Pi(KB)$ to answer this question. We assume a finite horizon of steps, denoted by $s(0), \ldots, s(k)$. We use $h(L,S)$ to encode that fluent literal $L$ is true at step $S$. We use $believes(B,S)$ to state that the agent believes $B$ at step $S$. Furthermore, to simplify the use of $\Pi(KB)$ with current ASP solvers, we  encode a rule of the form \eqref{rule}  using {\bf (a)} the ASP atom $rule(r, head, body\_id_{r})$ and
+{\bf (b)} the set of ASP atoms $\{mbr(l, body\_id_r) \mid l \in body_{r}\}$, where $body\_id$ is an identifier for the body of the rule and $mbr$ stands for `\textit{member\_of}'; similar encodings are used for  \eqref{default} and \eqref{pref}. 
 This method of encoding is similar to what is used  in answer set planning and allows for the separation between  the encoding of the problem and the rules for reasoning with it.
 The main challenge to be addressed lies in the interaction between observations and defaults. 
 We apply the following principles:
@@ -1225,7 +1225,7 @@ obs(P, S)  & \leftarrow & s(S), occ(A, S), exec(A, M), \nonumber    \\
 obs(L, S+1) & \leftarrow & s(S),     occ(A, S), causes(A, L, M), \nonumber    \\
 & &  N   =\# count \{X : mbr(X, M)\},   \nonumber\\
 & & \# count \{X : mbr(X, M),  \nonumber \\ 
-&& \hspace*{.4in} h(X, T) \} == N.  \label{lp:effect} 
+&& \hspace*{.4in} h(X, S) \} == N.  \label{lp:effect} 
 \end{eqnarray} 
 
 Rule \eqref{lp:exec} indicates that the observation of an action occurrence allows us to infer that its executability conditions must be satisfied---we capture this by generating new observations about the time step in which the action has occurred.
