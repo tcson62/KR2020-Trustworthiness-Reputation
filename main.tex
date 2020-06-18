@@ -821,9 +821,9 @@ These rules encode the principle {\bf (O)}. Rule \eqref{lp:obs1} states that $nr
 h\_body(M,S) & \leftarrow  &  s(S), \nonumber \\ 
         & & N  = \# count \{L : mbr(L, M)\},    \nonumber\\
         & & N_h= \# count \{L : mbr(L, M),  \nonumber\\
-        & & \hspace*{.8in}h(L, T) \},  \nonumber\\ 
+        & & \hspace*{.8in}h(L, S) \},  \nonumber\\ 
         & & N_b = \# count \{L : mbr(L, M), \nonumber\\
-        & &\hspace*{.44in}believes(L, T) \}, \nonumber \\
+        & &\hspace*{.44in}believes(L, S) \}, \nonumber \\
         & & N_h+N_b==N. \label{lp:body} \\
 believes(H, S) & \leftarrow & s(S),  rule(R_, H, M), \nonumber \\
         && h\_body(M,S)   \label{lp:rule}
@@ -840,7 +840,7 @@ believes(H, S) & \leftarrow & s(S),  rule(R_, H, M), \nonumber \\
 %
 \eqref{lp:body} defines an auxiliary predicate \textit{h\_body} where for each set $M$ of literals and time step $S$, 
 $h\_body(M,S)$ is true when all literals in $M$ are true or believed at $S$. 
-The `$==$' symbol denotes identity at the level of ground terms.\footnote{The variables involved are replaced by a constant during the grounding process and the identity is checked during the solving phase.} Checking whether the body is satisfied is compactly achieved by leveraging the $\#count$ aggregate of the ASP Core 2 language\footnote{Details can be found in \cite{ASPCore2Standard}}, which calculates the cardinality of a set. For instance, the expression $\# count \{L : mbr(L, M), h(L, T) \}$ finds the number of literals that are in the body of the rule ($mbr(L,M)$) and hold at time step $T$ ($h(L,T)$). The combination of aggregates present in (\ref{lp:rule}) checks that the number of literals that hold or are believed equals the size of the body of the rule.\footnote{Recall that fluent symbols and belief symbols are disjoint. }
+The `$==$' symbol denotes identity at the level of ground terms.\footnote{The variables involved are replaced by a constant during the grounding process and the identity is checked during the solving phase.} Checking whether the body is satisfied is compactly achieved by leveraging the $\#count$ aggregate of the ASP Core 2 language\footnote{Details can be found in \cite{ASPCore2Standard}}, which calculates the cardinality of a set. For instance, the expression $\# count \{L : mbr(L, M), h(L, S) \}$ finds the number of literals that are in the body of the rule ($mbr(L,M)$) and hold at time step $S$ ($h(L,S)$). The combination of aggregates present in (\ref{lp:rule}) checks that the number of literals that hold or are believed equals the size of the body of the rule.\footnote{Recall that fluent symbols and belief symbols are disjoint. }
 Intuitively, (\ref{lp:rule}) states that, if the body of a $rule$ statement is satisfied, then its head must be true. Recall that, according to the syntax given earlier, the head is a belief -- hence the expression $believes(H,S)$ in (\ref{lp:rule}). 
 
  For reasoning about defaults  of the form \eqref{default} we have:

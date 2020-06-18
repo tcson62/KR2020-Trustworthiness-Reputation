@@ -14,7 +14,8 @@ Artz, D., and Gil, Y.
 \newblock {A Survey of Trust in Computer Science and the Semantic Web}.
 \newblock {\em Journal of Web Semantics} 5:58--71.
 
-\bibitem[\protect\citeauthoryear{{ASP~Standardization~Working~Group}}{2013}]{ASPCore2Standard}
+\bibitem[\protect\citeauthoryear{{ASP~Standardization~Working~Group}}{2013}]{A%
+SPCore2Standard}
 {ASP~Standardization~Working~Group}.
 \newblock 2013.
 \newblock {ASP}-{C}ore-2 input language format, version 2.01c.
@@ -166,20 +167,20 @@ Sabater, J., and Sierra, C.
 \newblock {\em Artificial Intelligence Review} 24:33--60.
 
 \bibitem[\protect\citeauthoryear{Son \bgroup et al\mbox.\egroup
-  }{2016a}]{spg16b}
+  }{2016a}]{spg16}
 Son, T.~C.; Pontelli, E.; Gelfond, M.; and Balduccini, M.
 \newblock 2016a.
-\newblock {A}n {A}nswer {S}et {P}rogramming {F}ramework for {R}easoning about
-  {T}ruthfulness of {S}tatements by {A}gents.
-\newblock In {\em 32nd International Conference on Logic Programming (ICLP16)}.
-
-\bibitem[\protect\citeauthoryear{Son \bgroup et al\mbox.\egroup
-  }{2016b}]{spg16}
-Son, T.~C.; Pontelli, E.; Gelfond, M.; and Balduccini, M.
-\newblock 2016b.
 \newblock {R}easoning about {T}ruthfulness of {A}gents {U}sing {A}nswer {S}et
   {P}rogramming.
 \newblock In {\em 15th International Conference on Principles of Knowledge
   Representation and Reasoning}.
+
+\bibitem[\protect\citeauthoryear{Son \bgroup et al\mbox.\egroup
+  }{2016b}]{spg16b}
+Son, T.~C.; Pontelli, E.; Gelfond, M.; and Balduccini, M.
+\newblock 2016b.
+\newblock {A}n {A}nswer {S}et {P}rogramming {F}ramework for {R}easoning about
+  {T}ruthfulness of {S}tatements by {A}gents.
+\newblock In {\em 32nd International Conference on Logic Programming (ICLP16)}.
 
 \end{thebibliography}

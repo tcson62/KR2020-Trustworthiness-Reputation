@@ -1,5 +1,7 @@
-This is BibTeX, Version 0.99d (TeX Live 2018)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is 8-bit Big BibTeX version 0.99c
+Implementation:  WIN32 Console, BaKoMa TNS bound.
+Release version: 3.71 (18 Aug 1996)
+
 The top-level auxiliary file: main.aux
 The style file: kr.bst
 Database file #1: enrico.bib
@@ -14,45 +16,12 @@ Repeated entry---line 5027 of file bib-mbal.bib
  :  nb15
  :      ,
 I'm skipping whatever remains of this entry
-You've used 25 entries,
-            2568 wiz_defined-function locations,
-            750 strings with 9045 characters,
-and the built_in function-call counts, 10191 in all, are:
-= -- 1093
-> -- 379
-< -- 10
-+ -- 125
-- -- 121
-* -- 754
-:= -- 1631
-add.period$ -- 134
-call.type$ -- 25
-change.case$ -- 156
-chr.to.int$ -- 23
-cite$ -- 25
-duplicate$ -- 437
-empty$ -- 768
-format.name$ -- 163
-if$ -- 2170
-int.to.chr$ -- 3
-int.to.str$ -- 0
-missing$ -- 24
-newline$ -- 157
-num.names$ -- 79
-pop$ -- 155
-preamble$ -- 1
-purify$ -- 183
-quote$ -- 0
-skip$ -- 332
-stack$ -- 0
-substring$ -- 457
-swap$ -- 115
-text.length$ -- 10
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 196
-warning$ -- 0
-while$ -- 82
-width$ -- 28
-write$ -- 355
+
+Here's how much of BibTeX's memory you used:
+ Cites:                25 out of 7500
+ Fields:              564 out of 125000
+ Hash table:        34786 out of 35000
+ Strings:             748 out of 30000
+ String pool:        9028 out of 750000
+ Wizard functions:   2568 out of 10000
 (There were 2 error messages)
