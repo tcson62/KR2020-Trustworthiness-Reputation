@@ -154,12 +154,13 @@
 % the pdfinfo within the preamble
 %
 \title{An Answer Set Programming Framework for Reasoning about Agents' Beliefs and Truthfulness of Statements} %\\
-\author{Marcello Balduccini$^1$ \And 
-Michael Gelfond$^2$ \And
-Enrico Pontelli$^3$ \and Tran Cao Son$^3$ 
+\author{Marcello Balduccini$^1$ \and 
+Michael Gelfond$^2$ \and
+Enrico Pontelli$^3$ \and 
+Tran Cao Son$^3$ 
 \affiliations
-$^1$Saint Joseph's University \and 
-$^2$Texas Tech University\and 
+$^1$Saint Joseph's University \\ 
+$^2$Texas Tech University\\ 
 $^3$New Mexico State University
 \emails
    mbalducc@sju.edu,   
@@ -1464,7 +1465,7 @@ Assume that the police are able to tell when Bob shot the person and when he obs
 
 A possible formalization of the knowledge base from this example is the following set $RD^s$ of statements:
 
-\begin{lstlisting}[language=clingo,caption=Set $RD^s$ of statements for the self-defense example, label=lst:pi_S, mathescape=true,xleftmargin=.01\textwidth, breaklines=true]
+\begin{lstlisting}[language=clingo,numbers=none,caption=Set $RD^s$ of statements for the self-defense example, label=lst:pi_S, mathescape=true,xleftmargin=.01\textwidth, breaklines=true]
 causes(appears(X),is(X,present),[]).
 default($d^s_1$,inImminentDanger,[has(att,k),
   is(att,present),is(att,menc)])
@@ -1485,16 +1486,16 @@ As can be seen from the $prefer$ statements, $d^s_2$ is the most preferred defau
 The initial part of the story is captured by:
 \[
 \begin{array}{lll}
-O^s_{init}  =  \left\{
+O^s_{init}  \!=\!  \left\{
 \begin{array}{ll} 
-obs(at(a_1),0).   %\ \ \ \ 
-& obs(is(a_1,good),0). \\
-obs(\neg is(att,present),0). & 
+\!\!obs(at(a_1),0).   %\ \ \ \ 
+&\!\! obs(is(a_1,good),0). \\
+\!\!obs(\neg is(att,present),0). & \!\!
 occ(appears(att),0). \\    % the guy appears
-obs(is(att,menc),1). &  %\ \ \ \     % the guy is menacing-looking
+\!\!obs(is(att,menc),1). &\!\!  %\ \ \ \     % the guy is menacing-looking
 obs(has(att,k),1).
 \end{array}
-\right\}
+\right.
 \end{array}
 \]
 Let us consider what our framework yields for $KB^s_{init}=\langle O^s_{init},RD^s \rangle$. One can check that the answer set of $\Pi(KB^s_{init})$ contains $h(at(a_1),0)$ and $h(is(a_1,good),0)$. The only applicable default is $d^s_3$, yielding $believes(\neg inImminentDanger,0)$, i.e. Bob does not believe to be in imminent danger at time step $0$. The two possible evolutions of the story are formalized as follows:
@@ -1533,7 +1534,7 @@ For example, a MITM attack was used in Stuxnet,\footnote{\tiny \url{https://en.w
 
 %
 \begin{figwindow}[3,r,%
-        {\includegraphics[width=.5\textwidth]{mim}},%
+        {\includegraphics[scale=0.44]{mim}},%
         {MITM attack carried out by Stuxnet: safe commands sent by the PLC (green) are replaced by dangerous ones (red); alarm readings from the centrifuge's sensors (red) are replaced by  safe ones\label{fig:stuxnet}}]
 \end{figwindow}
 The behavior of Stuxnet's MITM component is outlined in Figure \ref{fig:stuxnet}. Its component operates by intercepting the commands sent by a PLC to a connected centrifuge. The malware first increased the speed of the centrifuge above normal levels for a short amount of time, and later slowed it down below normal levels for a longer period of time. It is believed that the resulting stress caused components of the centrifuge to expand and eventually destroy it. Under normal conditions, sensors installed in the centrifuge would have alerted the PLC---and its users---about the abnormal conditions, giving them a chance to shut down the system before damage occurred. However, as part of the MITM attack, Stuxnet also intercepted the sensor readings from the centrifuge, and sent to the PLC fake readings based on previous recordings that indicated that the system was operating normally (this is known as a \emph{replay attack}). 
@@ -1573,7 +1574,7 @@ default(d_3^m,overheat,[alert, \neg hot\_room]).
 }
 \fi
 %
-\begin{lstlisting}[language=clingo,caption=Relevant Information, label=lst:pi_M, mathescape=true,xleftmargin=.01\textwidth, breaklines=true]
+\begin{lstlisting}[language=clingo,numbers=none,caption=Relevant Information, label=lst:pi_M, mathescape=true,xleftmargin=.01\textwidth, breaklines=true]
 default($d_1^m$, hot_room, [alert]). 
 default($d_2^m$, $\neg$hot_room, [cold_weather]). 
 prefer($d_2^m$,$d_1^m$, [ ]). 
@@ -1814,7 +1815,7 @@ Our  system can be easily extended to deal with the first extension
 as it currently deals with time stamped literals already. The second extension might require the change in Def.~\ref{kb:entail}. The third extension might involve a significant amount of modification. We leave all these extensions for future work.  
 
 
-\section*{Acknowledgment}
+\section*{Acknowledgments}
 
 This research is partially supported by NSF grants 1757207, 1812619, 1812628, and 1914635. The views and conclusions contained in this document are those of the authors and should not be interpreted as representing the official policies, either expressed or implied, of the sponsoring organizations, agencies, or the U.S. government.
 
