@@ -1,0 +1,6 @@
+\babel@toc {english}{}
+\beamer@sectionintoc {1}{Motivation and Contributions}{2}{0}{1}
+\beamer@sectionintoc {2}{Beliefs about and Truthfulness of Statements}{7}{0}{2}
+\beamer@sectionintoc {3}{Reasoning about Beliefs and Truthfulness Using ASP}{11}{0}{3}
+\beamer@sectionintoc {4}{Application}{14}{0}{4}
+\beamer@sectionintoc {5}{Conclusions and Future Work}{16}{0}{5}
